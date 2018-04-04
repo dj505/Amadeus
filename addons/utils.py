@@ -110,7 +110,7 @@ class Utils:
     async def source(self, ctx):
         embed = discord.Embed(title='Bot Source Code', description='Have some spaghetti code!', color=0x00FF99)
         embed.set_thumbnail(url='https://opensource.org/files/osi_keyhole_600X600_90ppi.png')
-        embed.add_field(name='GitHub Repository', value='https://github.com/dj505/SwitchHaxingBot', inline=True)
+        embed.add_field(name='GitHub Repository', value='https://github.com/dj505/MakiseKurisu', inline=True)
         await self.bot.say(embed=embed)
 
     @commands.command(pass_context=True, brief='Says something')
@@ -131,28 +131,6 @@ class Utils:
         embed = discord.Embed(name='Avatar', description=None, color=0x000000)
         embed.set_image(url=user.avatar_url)
         await self.bot.say(embed=embed)
-
-    @commands.command(pass_context=True, brief='Lists hax status on a given FW')
-    async def fwinfo(self, ctx, fw):
-        '''
-        Lists information on a given firmware.
-        '''
-        config = SafeConfigParser()
-        config.read('fwinfo.ini')
-        if fw == "4.2.0":
-            embed = discord.Embed(title='lol', description=None, color=0x00FF99)
-            embed.set_image(url='https://cdn.discordapp.com/attachments/360869213465739265/428259690636378113/1EqHdB.gif')
-            await self.bot.say(embed=embed)
-        else:
-            if config.has_section('{}'.format(fw)):
-                information = config.get('{}'.format(fw), 'info')
-                embed = discord.Embed(title='Firmware Information for {}'.format(fw), description='{}'.format(information), color=0x00FF99)
-                await self.bot.say(embed=embed)
-
-            else:
-                embed = discord.Embed(title='Invalid firmware!', description='I cannot find that firmware version!', color=0xFF0000)
-                embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
-                await self.bot.say(embed=embed)
 
 def message_string_parser(message):
     return(message[message.find(' ')+1:])
