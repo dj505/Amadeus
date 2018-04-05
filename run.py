@@ -55,6 +55,12 @@ async def on_member_join(member):
                                                                   ' the rules!**')
 
 @bot.event
+async def on_member_remove(member):
+    goodbyes = ['Goodbye, ','See ya, ','Bye, ','Sorry to see you go, ']
+    bye = random.choice(goodbyes)
+    await bot.send_message(bot.get_channel('429756378542768129'), '{}'.format(bye) + '{0.mention}!'.format(member))
+
+@bot.event
 async def on_command_error(error, ctx):
     if isinstance(error, commands.errors.CommandNotFound):
         embed = discord.Embed(title='Error!', description='I cannot find that command!', color=0xFF0000)
