@@ -25,7 +25,7 @@ class Utils:
         embed.add_field(name='Join Date', value=user.joined_at, inline=True)
         await self.bot.say(embed=embed)
 
-    @commands.command(pass_context="True",brief="Adds 150 to your currency count. Can be used once every 24 hours.", aliases=['money','coin','wallet'])
+    @commands.command(pass_context="True",brief="Adds 150 to your currency count. Can be used once every 24 hours.", aliases=['money','coin'])
     @commands.cooldown(1, 86400.0, commands.BucketType.user)
     async def daily(self, ctx):
         """

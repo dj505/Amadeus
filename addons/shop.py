@@ -41,7 +41,7 @@ class Shop:
                 await self.bot.say(embed=embed)
 
         @commands.command(pass_context=True, brief='Check your wallet balance')
-        async def balance(self, ctx):
+        async def wallet(self, ctx):
             member = ctx.message.author.id
             config = SafeConfigParser()
             config.read('wallet.ini')
