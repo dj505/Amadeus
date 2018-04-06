@@ -11,7 +11,7 @@ class Shop:
         self.bot = bot
         print('Addon "{}" loaded'.format(self.__class__.__name__))
 
-    @commands.command(pass_context=True, brief='Purchase a role, or assign yorself the free Members role')
+    @commands.command(pass_context=True, brief='Purchase a role for 100 credits, or assign yorself the free Members role')
     async def role(self, ctx, role: discord.Role):
         member = ctx.message.author
         if str(role).lower() == 'admins' or str(role).lower() == 'moderators':
