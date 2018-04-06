@@ -42,11 +42,11 @@ class Shop:
 
         @commands.command(pass_context=True, brief='Check your wallet balance')
         async def balance(self, ctx):
-        	member = ctx.message.author.id
-        	config = SafeConfigParser()
-        	config.read('wallet.ini')
-        	balance = config.get(member, 'balance')
-        	embed = discord.Embed(title='Wallet', description=None, color=0xFFD000)
+            member = ctx.message.author.id
+            config = SafeConfigParser()
+            config.read('wallet.ini')
+            balance = config.get(member, 'balance')
+            embed = discord.Embed(title='Wallet', description=None, color=0xFFD000)
             embed.add_field(name='Balance', value='Your balance now {}.'.format(balance), inline=True)
             embed.set_thumbnail(url='https://i.imgur.com/akZqYz8.png')
             await self.bot.say(embed=embed)
