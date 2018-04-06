@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import configparser
-from configparser import safeConfigParser
+from configparser import SafeConfigParser
 
 class Settings:
     '''
