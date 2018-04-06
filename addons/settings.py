@@ -22,8 +22,12 @@ class Settings:
         original_desc = config.get('main', 'desc')
         if desc == '':
             config.set('main', 'desc', '{}'.format(original_desc))
+            with open('settings.ini', 'w') as f:
+                config.write(f)
         else:
             config.set('main', 'desc', '{}'.format(desc))
+            with open('settings.ini', 'w') as f:
+                config.write(f)
 
 def setup(bot):
     bot.add_cog(Settings(bot))
