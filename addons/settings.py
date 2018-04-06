@@ -24,10 +24,16 @@ class Settings:
             config.set('main', 'desc', '{}'.format(original_desc))
             with open('settings.ini', 'w') as f:
                 config.write(f)
+            embed = discord.Embed(title='Settings Not Updated', description=None, color=0x99FF00)
+            embed.add_field(name='Description', value='The description you entered was blank and not changed.', inline=True)
+            await self.bot.say(embed=embed)
         else:
             config.set('main', 'desc', '{}'.format(desc))
             with open('settings.ini', 'w') as f:
                 config.write(f)
+            embed = discord.Embed(title='Updated settings', description=None, color=0x00FF99)
+            embed.add_field(name='Description', value='New description: {}'.format(desc), inline=True)
+            await self.bot.say(embed=embed)
 
 def setup(bot):
     bot.add_cog(Settings(bot))
