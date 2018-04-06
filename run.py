@@ -52,7 +52,7 @@ async def on_member_join(member):
     greeting = random.choice(greetings)
     await bot.send_message(bot.get_channel('429756378542768129'), '{}'.format(greeting) + '{0.mention}!'.format(member) + '\n\nIf you are unable to post in any other channels, ' \
                                                                   'please post a message here in #newcomers and we\'ll get you sorted.\nBut first, **please read through' \
-                                                                  ' the rules!**')
+                                                                  ' the rules!** If you\'d like, you can use the `k!role Members` command to give yourself the Member role for now.')
 
 @bot.event
 async def on_member_remove(member):
