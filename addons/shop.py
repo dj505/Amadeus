@@ -40,16 +40,16 @@ class Shop:
                 embed = discord.Embed(title='No Wallet', description='You do not have an existing wallet or balance! Please run the `daily` command.', color=0xFF0000)
                 await self.bot.say(embed=embed)
 
-        @commands.command(pass_context=True, brief='Check your wallet balance')
-        async def wallet(self, ctx):
-            member = ctx.message.author.id
-            config = SafeConfigParser()
-            config.read('wallet.ini')
-            balance = config.get(member, 'balance')
-            embed = discord.Embed(title='Wallet', description=None, color=0xFFD000)
-            embed.add_field(name='Balance', value='Your balance now {}.'.format(balance), inline=True)
-            embed.set_thumbnail(url='https://i.imgur.com/akZqYz8.png')
-            await self.bot.say(embed=embed)
+    @commands.command(pass_context=True, brief='Check your wallet balance')
+    async def wallet(self, ctx):
+        member = ctx.message.author.id
+        config = SafeConfigParser()
+        config.read('wallet.ini')
+        balance = config.get(member, 'balance')
+        embed = discord.Embed(title='Wallet', description=None, color=0xFFD000)
+        embed.add_field(name='Balance', value='Your balance now {}.'.format(balance), inline=True)
+        embed.set_thumbnail(url='https://i.imgur.com/akZqYz8.png')
+        await self.bot.say(embed=embed)
     
 def setup(bot):
     bot.add_cog(Shop(bot))
