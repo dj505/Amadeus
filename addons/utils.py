@@ -132,19 +132,6 @@ class Utils:
         embed.set_image(url=user.avatar_url)
         await self.bot.say(embed=embed)
 
-    @commands.command(pass_context=True, brief='Assign yourself a role!')
-    async def role(self, ctx, role: discord.Role):
-        if str(role).lower() == 'admins' or str(role).lower() == 'moderators':
-            embed = discord.Embed(title='Role assignment failed!', description='It looks like you tried to give yourself an admin or moderator role. ' \
-                                                                               'This is not a publicly assignable role.', color=0xFF0000)
-            embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
-            await self.bot.say(embed=embed)
-        else:
-            member = ctx.message.author
-            await self.bot.add_roles(member, role)
-            embed = discord.Embed(title='Set role!', description='You have successfully been assigned the {} role!'.format(role), color=0x00FF99)
-            await self.bot.say(embed=embed)
-
 def message_string_parser(message):
     return(message[message.find(' ')+1:])
 
