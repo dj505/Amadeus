@@ -2,6 +2,12 @@ import discord
 from discord.ext import commands
 from configparser import SafeConfigParser
 import datetime
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
+from configparser import SafeConfigParser
+import requests
+from io import BytesIO
 
 class Utils:
     '''
@@ -16,14 +22,34 @@ class Utils:
         """
         Allows you to get information on a user simply by tagging them.
         """
-        embed = discord.Embed(title='User Information Panel', description='User information for {}:'.format(user.name), color=0x00FF99)
-        embed.set_thumbnail(url=user.avatar_url)
-        embed.add_field(name='Name', value=user.name, inline=True)
-        embed.add_field(name='ID', value=user.id, inline=True)
-        embed.add_field(name='Status', value=user.status, inline=True)
-        embed.add_field(name='Highest Role', value=user.top_role, inline=True)
-        embed.add_field(name='Join Date', value=user.joined_at, inline=True)
-        await self.bot.say(embed=embed)
+        member = user.id
+        config = SafeConfigParser()
+        config.read('wallet.ini')
+        if(config.has_section(member)):
+            balance = config.get(member, 'balance')
+        else:
+            balance = 'None'
+        img = Image.open("infocard-original.png")
+        avatar = requests.get(user.avatar_url)
+        avatar = Image.open(BytesIO(avatar.content))
+        basewidth = 90
+        wpercent = (basewidth / float(avatar.size[0]))
+        hsize = int((float(avatar.size[1]) * float(wpercent)))
+        avatar = avatar.resize((basewidth, hsize), Image.ANTIALIAS)
+        avatar.save('{}-avatar-ico.png'.format(user.name))
+        avatar = Image.open('{}-avatar-ico.png'.format(user.name))
+        draw = ImageDraw.Draw(img)
+        font = ImageFont.truetype("Archivo-Bold.ttf", 45)
+        img.paste(avatar, (29, 29))
+        draw.text((135, 60),'{}'.format(user.name),(255,255,255),font=font)
+        font = ImageFont.truetype("Archivo-Bold.ttf", 30)
+        draw.text((194, 132),'{}'.format(user.id),(255,255,255),font=font)
+        draw.text((194, 164),'{}'.format(user.status),(255,255,255),font=font)
+        draw.text((194, 196),'{}'.format(user.top_role),(255,255,255),font=font)
+        draw.text((194, 228),'{}'.format(str(user.joined_at)[:10]),(255,255,255),font=font)
+        draw.text((194, 260),'{}'.format(balance),(255,255,255),font=font)
+        img.save('infocard-{}.png'.format(user.name))
+        await self.bot.send_file(ctx.message.channel, 'infocard-{}.png'.format(user.name))
 
     @commands.command(pass_context="True",brief="Adds 150 to your currency count. Can be used once every 24 hours.", aliases=['money','coin'])
     @commands.cooldown(1, 86400.0, commands.BucketType.user)

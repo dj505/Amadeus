@@ -34,7 +34,7 @@ class Shop:
                 with open('wallet.ini','w') as f:
                     config.write(f)
                 await self.bot.add_roles(member, role)
-                embed = discord.Embed(title='Set role!', description='You have successfully been assigned the {} role!'.format(role), color=0x00FF99)
+                embed = discord.Embed(title='Set role!', description='You have successfully been assigned the {} role for 100 credits!'.format(role), color=0x00FF99)
                 await self.bot.say(embed=embed)
             else:
                 embed = discord.Embed(title='No Wallet', description='You do not have an existing wallet or balance! Please run the `daily` command.', color=0xFF0000)

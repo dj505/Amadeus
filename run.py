@@ -48,11 +48,20 @@ async def on_ready():
 
 @bot.event
 async def on_member_join(member):
-    greetings = ['Hello there! You are a bold one, ','Hey there, welcome to the server ','Oh hi there! Welcome, ','Hey! welcome, ','Welcome to the server, ','Yo, welcome to the server, ']
+    greetings = ['Hello there! You are a bold one, {0.mention}!'.format(member),
+                 'Hey there, {0.mention}! Welcome to Future Studio!'.format(member),
+                 'Oh hi {0.mention}! Welcome to Future Studio!'.format(member),
+                 'Hey! Welcome, {0.mention}!'.format(member),
+                 'Welcome to the server, {0.mention}'.format(member),
+                 'Yo, welcome to Future Studio, {0.mention}!'.format(member),
+                 'Thanks for popping in, {0.mention}! Welcome to Future Studio!'.format(member)]
     greeting = random.choice(greetings)
-    await bot.send_message(bot.get_channel('429756378542768129'), '{}'.format(greeting) + '{0.mention}!'.format(member) + '\n\nIf you are unable to post in any other channels, ' \
-                                                                  'please post a message here in #newcomers and we\'ll get you sorted.\nBut first, **please read through' \
-                                                                  ' the rules!** If you\'d like, you can use the `k!role Members` command to give yourself the Member role for now.')
+    welcome_message = '\n\nPlease feel free to introduce yourself! If none of the admins are around to assign the member role, ' \
+                      'use the command `k!role Members` (case sensitive) in #bot-commands and it\'ll be automatically assigned.' \
+                      ' If you\'d like a cool coloured role, use `k!daily` to get your daily 150 credits, and use `k!role colour' \
+                      '` to give yourself the role. Keep in mind this costs 100 credits! With that out of the way, remember to ' \
+                      'read the #rules! Enjoy your stay!'
+    await bot.send_message(bot.get_channel('429756378542768129'), '{}'.format(greeting) + '{}'.format(welcome_message))
 
 @bot.event
 async def on_member_remove(member):
