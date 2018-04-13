@@ -23,7 +23,7 @@ class Shop:
             await self.bot.add_roles(member, role)
             embed = discord.Embed(title='Set role!', description='You have successfully been assigned the {} role!'.format(role), color=0x00FF99)
             await self.bot.say(embed=embed)
-        elif str(role).lower() != 'members':
+        elif str(role).lower() != 'members' and get_balance('{}'.format(member.id)) > 100:
             user = ctx.message.author.id
             config = SafeConfigParser()
             config.read('wallet.ini')
@@ -39,6 +39,8 @@ class Shop:
             else:
                 embed = discord.Embed(title='No Wallet', description='You do not have an existing wallet or balance! Please run the `daily` command.', color=0xFF0000)
                 await self.bot.say(embed=embed)
+        else:
+            await self.bot.say('You cannot afford this role.')
 
     @commands.command(pass_context=True, brief='Check your wallet balance')
     async def wallet(self, ctx):
@@ -50,6 +52,13 @@ class Shop:
         embed.add_field(name='Balance', value='Your balance is {}.'.format(balance), inline=True)
         embed.set_thumbnail(url='https://i.imgur.com/akZqYz8.png')
         await self.bot.say(embed=embed)
+
+def get_balance(userid):
+    config = SafeConfigParser()
+    config.read('wallet.ini')
+    balance = config.get(userid, 'balance')
+    return int(balance)
+
     
 def setup(bot):
     bot.add_cog(Shop(bot))
