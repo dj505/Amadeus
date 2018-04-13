@@ -24,9 +24,9 @@ class Shop:
             embed = discord.Embed(title='Set role!', description='You have successfully been assigned the {} role!'.format(role), color=0x00FF99)
             await self.bot.say(embed=embed)
         elif str(role) in assignable_roles and get_balance(ctx.message.author.id) >= 100:
-        	config = SafeConfigParser()
+            config = SafeConfigParser()
             config.read('wallet.ini')
-        	if config.has_section('{}'.format(user)):
+            if config.has_section('{}'.format(user)):
                 balance = int(config.get('{}'.format(user), 'balance'))
                 balance = balance - 100
                 config.set('{}'.format(user), 'balance', "{}".format(balance))
