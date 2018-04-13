@@ -35,7 +35,7 @@ class Shop:
 
     @commands.command(pass_context=True, brief='List assignable roles.')
     async def listroles(self, ctx):
-        roles = get_roles()
+        roles = get_roles(ctx.server.roles)
         assignable_roles = open('assignable_roles.txt', 'r')
         bot_message='```'
         for assignable_roles in roles:
