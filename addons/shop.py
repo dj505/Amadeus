@@ -40,7 +40,7 @@ class Shop:
                 embed = discord.Embed(title='No Wallet', description='You do not have an existing wallet or balance! Please run the `daily` command.', color=0xFF0000)
                 await self.bot.say(embed=embed)
         else:
-            embed = discord.Embed(title='Error!', description='Either you cannot afford this role, or something weird went wrong behind the scenes.', color=0xFF0000)
+            embed = discord.Embed(title='Error!', description='Either you cannot afford this role, or you specified an invalid role. Roles are case sensitive!', color=0xFF0000)
             await self.bot.say(embed=embed)
 
     @commands.command(pass_context=True, brief='Check your wallet balance')
