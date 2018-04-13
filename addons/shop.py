@@ -27,6 +27,7 @@ class Shop:
         elif str(role) in assignable_roles and get_balance(ctx.message.author.id) >= 100:
             config = SafeConfigParser()
             config.read('wallet.ini')
+            user = ctx.message.author.id
             if config.has_section('{}'.format(user)):
                 balance = int(config.get('{}'.format(user), 'balance'))
                 balance = balance - 100
