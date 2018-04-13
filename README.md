@@ -13,7 +13,7 @@ A lot! There's a variety of moderator commands such as:
 Here are some standard user commands;
 
 - `ping`: checks the bot's response time
-- `userinfo`: brings up an information card on the specified user
+- `userinfo`: brings up a fancy image-based information card on the specified user
 - `daily`: adds 150 to the user's wallet, can be used once per day
 - `avatar`: gets the avatar of a specified user
 - `react`: posts a reaction gif set with the `addgif` command
@@ -40,12 +40,15 @@ reactions.ini (this one may not be necessary)
 ```
 (Note: this might not be necessary unless the command throws an error when attempting to add a gif and the `[gif]` section does not exist.)
 
+For the image-based profile card, feel free to modify it, but keep in mind you'll need to change the locations of the text and everything in `utils.py`.
+
 Once those are made, make sure you have the following **prerequisites**:
 - Python3
 - Discord.py
 - xkcd
 - bs4
 - requests
+- PIL (Pillow may or may not work)
 - any others it may prompt for (these are all from memory)
 
 Then simply run `run.py`!
