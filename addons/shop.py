@@ -14,7 +14,7 @@ class Shop:
     @commands.command(pass_context=True, brief='Purchase a role for 100 credits, or assign yorself the free Members role')
     async def role(self, ctx, role: discord.Role):
         assignable_roles = open('assignable_roles.txt', 'r')
-        if str(role).lower() == 'moderator' or 'admin':
+        if str(role).lower() == 'moderator' or str(role).lower() == 'admin':
             embed = discord.Embed(title='Role assignment failed!', description='It looks like you tried to give yourself an admin or moderator role. ' \
                                                                                'This is not a publicly assignable role.', color=0xFF0000)
             embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
