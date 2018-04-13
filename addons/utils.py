@@ -30,7 +30,7 @@ class Utils:
         if(config.has_section(member)):
             balance = config.get(member, 'balance')
         else:
-            balance = 'None'
+            balance = 'No Wallet'
         img = Image.open("infocard-original.png")
         avatar = requests.get(user.avatar_url)
         avatar = Image.open(BytesIO(avatar.content))
@@ -40,7 +40,6 @@ class Utils:
         avatar = avatar.resize((basewidth, hsize), Image.ANTIALIAS)
         avatar.save('{}-avatar-ico.png'.format(user.name))
         avatar = Image.open('{}-avatar-ico.png'.format(user.name))
-        draw = ImageDraw.Draw(img)
         font = ImageFont.truetype("Archivo-Bold.ttf", 45)
         img.paste(avatar, (29, 29))
         draw.text((135, 60),'{}'.format(user.name),(255,255,255),font=font)
@@ -54,6 +53,7 @@ class Utils:
         await self.bot.send_file(ctx.message.channel, 'infocard-{}.png'.format(user.name))
         time.sleep(10)
         os.remove('infocard-{}.png'.format(user.name))
+        os.remove('{}-avatar-ico.png'.format(user.name))
 
     @commands.command(pass_context="True",brief="Adds 150 to your currency count. Can be used once every 24 hours.", aliases=['money','coin'])
     @commands.cooldown(1, 86400.0, commands.BucketType.user)
