@@ -13,35 +13,16 @@ class Shop:
 
     @commands.command(pass_context=True, brief='Purchase a role for 100 credits, or assign yorself the free Members role')
     async def role(self, ctx, role: discord.Role):
-        member = ctx.message.author
-        if str(role).lower() == 'admins' or str(role).lower() == 'moderators':
-            embed = discord.Embed(title='Role assignment failed!', description='It looks like you tried to give yourself an admin or moderator role. ' \
+        if str(role).lower() == 'moderator' or 'admin':
+        	embed = discord.Embed(title='Role assignment failed!', description='It looks like you tried to give yourself an admin or moderator role. ' \
                                                                                'This is not a publicly assignable role.', color=0xFF0000)
             embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
             await self.bot.say(embed=embed)
         elif str(role).lower() == 'members':
-            await self.bot.add_roles(member, role)
+        	await self.bot.add_roles(member, role)
             embed = discord.Embed(title='Set role!', description='You have successfully been assigned the {} role!'.format(role), color=0x00FF99)
             await self.bot.say(embed=embed)
-        elif str(role).lower() != 'members' and get_balance('{}'.format(member.id)) >= 100:
-            user = ctx.message.author.id
-            config = SafeConfigParser()
-            config.read('wallet.ini')
-            if config.has_section('{}'.format(user)):
-                balance = int(config.get('{}'.format(user), 'balance'))
-                balance = balance - 100
-                config.set('{}'.format(user), 'balance', "{}".format(balance))
-                with open('wallet.ini','w') as f:
-                    config.write(f)
-                await self.bot.add_roles(member, role)
-                embed = discord.Embed(title='Set role!', description='You have successfully been assigned the {} role for 100 credits!'.format(role), color=0x00FF99)
-                await self.bot.say(embed=embed)
-            else:
-                embed = discord.Embed(title='No Wallet', description='You do not have an existing wallet or balance! Please run the `daily` command.', color=0xFF0000)
-                await self.bot.say(embed=embed)
-        else:
-            embed = discord.Embed(title='Error!', description='Either you cannot afford this role, or you specified an invalid role. Roles are case sensitive!', color=0xFF0000)
-            await self.bot.say(embed=embed)
+#        elif str(role).lower()
 
     @commands.command(pass_context=True, brief='Check your wallet balance')
     async def wallet(self, ctx):
@@ -52,11 +33,29 @@ class Shop:
         embed.set_thumbnail(url='https://i.imgur.com/akZqYz8.png')
         await self.bot.say(embed=embed)
 
+    @commands.command(pass_context=True, brief='List assignable roles.')
+    async def listroles(self, ctx):
+    	roles = get_roles()
+    	assignable_roles = open('assignable_roles.txt', 'r')
+    	bot_message='```'
+    	for assignable_roles in roles:
+    		bot_message += '{}\n'.format(assignable_roles)
+    	bot_message += '```'
+    	embed = discord.Embed(title='Roles', description=bot_message, color=0x00FF99)
+        await self.bot.say(embed=embed)
+
 def get_balance(userid):
     config = SafeConfigParser()
     config.read('wallet.ini')
     balance = config.get(userid, 'balance')
     return int(balance)
+
+def get_roles(server):
+    x = server.roles
+    roles = []
+    for role in x:
+        roles.append(str(role))
+    return roles
 
 def setup(bot):
     bot.add_cog(Shop(bot))
