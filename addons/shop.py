@@ -14,12 +14,12 @@ class Shop:
     @commands.command(pass_context=True, brief='Purchase a role for 100 credits, or assign yorself the free Members role')
     async def role(self, ctx, role: discord.Role):
         if str(role).lower() == 'moderator' or 'admin':
-        	embed = discord.Embed(title='Role assignment failed!', description='It looks like you tried to give yourself an admin or moderator role. ' \
+            embed = discord.Embed(title='Role assignment failed!', description='It looks like you tried to give yourself an admin or moderator role. ' \
                                                                                'This is not a publicly assignable role.', color=0xFF0000)
             embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
             await self.bot.say(embed=embed)
         elif str(role).lower() == 'members':
-        	await self.bot.add_roles(member, role)
+            await self.bot.add_roles(member, role)
             embed = discord.Embed(title='Set role!', description='You have successfully been assigned the {} role!'.format(role), color=0x00FF99)
             await self.bot.say(embed=embed)
 #        elif str(role).lower()
@@ -35,13 +35,13 @@ class Shop:
 
     @commands.command(pass_context=True, brief='List assignable roles.')
     async def listroles(self, ctx):
-    	roles = get_roles()
-    	assignable_roles = open('assignable_roles.txt', 'r')
-    	bot_message='```'
-    	for assignable_roles in roles:
-    		bot_message += '{}\n'.format(assignable_roles)
-    	bot_message += '```'
-    	embed = discord.Embed(title='Roles', description=bot_message, color=0x00FF99)
+        roles = get_roles()
+        assignable_roles = open('assignable_roles.txt', 'r')
+        bot_message='```'
+        for assignable_roles in roles:
+            bot_message += '{}\n'.format(assignable_roles)
+        bot_message += '```'
+        embed = discord.Embed(title='Roles', description=bot_message, color=0x00FF99)
         await self.bot.say(embed=embed)
 
 def get_balance(userid):
