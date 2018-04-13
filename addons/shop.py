@@ -38,8 +38,8 @@ class Shop:
         roles = ctx.message.server.roles
         assignable_roles = open('assignable_roles.txt', 'r')
         bot_message='```'
-        for assignable_roles in roles:
-            bot_message += '{}\n'.format(assignable_roles)
+        for roles in assignable_roles:
+            bot_message += '{}\n'.format(roles)
         bot_message += '```'
         embed = discord.Embed(title='Roles', description=bot_message, color=0x00FF99)
         await self.bot.say(embed=embed)
