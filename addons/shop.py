@@ -46,7 +46,7 @@ class Shop:
     @commands.command(pass_context=True, brief='Check your wallet balance')
     async def wallet(self, ctx):
         member = ctx.message.author.id
-        get_balance(str(ctx.message.author.id))
+        balance = get_balance(str(ctx.message.author.id))
         embed = discord.Embed(title='Wallet', description=None, color=0xFFD000)
         embed.add_field(name='Balance', value='Your balance is {}.'.format(balance), inline=True)
         embed.set_thumbnail(url='https://i.imgur.com/akZqYz8.png')
