@@ -35,7 +35,7 @@ class Shop:
 
     @commands.command(pass_context=True, brief='List assignable roles.')
     async def listroles(self, ctx):
-        roles = get_roles(ctx.message.server.roles)
+        roles = ctx.message.server.roles
         assignable_roles = open('assignable_roles.txt', 'r')
         bot_message='```'
         for assignable_roles in roles:
@@ -50,12 +50,12 @@ def get_balance(userid):
     balance = config.get(userid, 'balance')
     return int(balance)
 
-def get_roles(server):
-    x = server.roles
-    roles = []
-    for role in x:
-        roles.append(str(role))
-    return roles
+# def get_roles(server):
+#     x = server.roles
+#     roles = []
+#     for role in x:
+#         roles.append(str(role))
+#     return roles
 
 def setup(bot):
     bot.add_cog(Shop(bot))
