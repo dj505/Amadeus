@@ -8,6 +8,8 @@ from PIL import ImageFont
 from configparser import SafeConfigParser
 import requests
 from io import BytesIO
+import time
+import os
 
 class Utils:
     '''
@@ -50,6 +52,8 @@ class Utils:
         draw.text((194, 260),'{}'.format(balance),(255,255,255),font=font)
         img.save('infocard-{}.png'.format(user.name))
         await self.bot.send_file(ctx.message.channel, 'infocard-{}.png'.format(user.name))
+        time.sleep(10)
+        os.remove('infocard-{}.png'.format(user.name))
 
     @commands.command(pass_context="True",brief="Adds 150 to your currency count. Can be used once every 24 hours.", aliases=['money','coin'])
     @commands.cooldown(1, 86400.0, commands.BucketType.user)
