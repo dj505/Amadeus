@@ -41,6 +41,7 @@ class Utils:
         avatar.save('{}-avatar-ico.png'.format(user.name))
         avatar = Image.open('{}-avatar-ico.png'.format(user.name))
         font = ImageFont.truetype("Archivo-Bold.ttf", 45)
+        draw = ImageDraw.Draw(img)
         img.paste(avatar, (29, 29))
         draw.text((135, 60),'{}'.format(user.name),(255,255,255),font=font)
         font = ImageFont.truetype("Archivo-Bold.ttf", 30)
