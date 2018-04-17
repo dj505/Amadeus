@@ -67,7 +67,7 @@ async def on_member_join(member):
 async def on_member_remove(member):
     goodbyes = ['Goodbye, ','See ya, ','Bye, ','Sorry to see you go, ']
     bye = random.choice(goodbyes)
-    await bot.send_message(bot.get_channel('429756378542768129'), '{}'.format(bye) + '{0.mention}!'.format(member))
+    await bot.send_message(bot.get_channel('429756378542768129'), '{}'.format(bye) + '{}!'.format(member))
 
 @bot.event
 async def on_command_error(error, ctx):
@@ -111,9 +111,9 @@ addons = [
     'addons.load',
     'addons.utils',
     'addons.xkcdparse',
-    'addons.doom',
     'addons.modutils',
-    'addons.fun'
+    'addons.fun',
+    'addons.shop'
 ]
 
 failed_addons = []
