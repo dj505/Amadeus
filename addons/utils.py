@@ -141,7 +141,7 @@ class Utils:
     async def source(self, ctx):
         embed = discord.Embed(title='Bot Source Code', description='Have some spaghetti code!', color=0x00FF99)
         embed.set_thumbnail(url='https://opensource.org/files/osi_keyhole_600X600_90ppi.png')
-        embed.add_field(name='GitHub Repository', value='https://github.com/dj505/MakiseKurisu', inline=True)
+        embed.add_field(name='GitHub Repository', value='https://github.com/dj505/Amadeus', inline=True)
         await self.bot.say(embed=embed)
 
     @commands.command(pass_context=True, brief='Says something')
