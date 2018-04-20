@@ -38,8 +38,30 @@ class Fun:
             embed.set_image(url='https://upload.wikimedia.org/wikipedia/en/thumb/8/8a/Quarter_Obverse_2010.png/220px-Quarter_Obverse_2010.png')
         await self.bot.say(embed=embed)
 
-    @commands.command(brief='Roll a D20 for a specified stat!',aliases=['rollfor'])
-    async def d20(self, *stat):
+    @commands.command(brief='Roll a plain D20.')
+    async def rollfor(self):
+        result = random.randint(1,20)
+        embed = discord.Embed(name='D20 roll!',description='Your result is...', color=0xFF0000)
+        embed.set_author(name='D20 roll!')
+        embed.set_thumbnail(url='https://i.imgur.com/s2qFxaa.png')
+        if result <= 5:
+            rollcomment = 'Way Off'
+        elif result > 5 and result <= 10:
+            rollcomment = 'Decent'
+        elif result > 10 and result <= 15:
+            rollcomment = 'Great!'
+        elif result > 15 and result <= 19:
+            rollcomment = 'Excellent!'
+        elif result == 0:
+            rollcomment = 'How did you even manage this'
+        if result == 20:
+            embed.add_field(name='Natural 20!',value='_Perfect!_')
+        else:
+            embed.add_field(name='**{}**'.format(result),value=rollcomment)
+        await self.bot.say(embed=embed)
+
+    @commands.command(brief='Roll a D20 for a specified stat!')
+    async def rollfor(self, *stat):
         result = random.randint(1,20)
         embed = discord.Embed(name='D20 roll!',description='Your result is...', color=0xFF0000)
         embed.set_author(name='D20 roll!')
