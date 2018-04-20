@@ -52,6 +52,9 @@ class Shop:
 
     @commands.command(pass_context=True, brief='List assignable roles.')
     async def listroles(self, ctx):
+        '''
+        Prints out a list of roles that you can assign yourself.
+        '''
         roles = ctx.message.server.roles
         assignable_roles = open('assignable_roles.txt', 'r')
         bot_message='```'
@@ -59,6 +62,14 @@ class Shop:
             bot_message += '{}\n'.format(roles)
         bot_message += '```'
         embed = discord.Embed(title='Roles', description=bot_message, color=0x00FF99)
+        await self.bot.say(embed=embed)
+
+    @commands.command(pass_context=True, brief='The main shop.', aliases=['buy','store'])
+    async def shop(self, ctx, item):
+        '''
+        This is where you buy most of the things.
+        '''
+        embed = discord.Embed(title='Work In Progress', description='This command is still a heavy WIP. Please wait.', color=0x00FF99)
         await self.bot.say(embed=embed)
 
 def get_balance(userid):

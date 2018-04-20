@@ -5,7 +5,7 @@ import time
 
 class Testing:
     '''
-    Making sure things actually work using one handy module
+    Basically just the ping command
     '''
     def __init__(self, bot):
         self.bot = bot

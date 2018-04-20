@@ -1,9 +1,10 @@
-# WonderlandBot by dj505. Version 3.0.0
+# Amadeus by dj505. Version 3.0.0
 # "The Great Refactoring"
 # Now much more easily configureable, with fewer hardcoded variables!
 
-import discord
-from discord.ext import commands
+# Import all of the required modules/libraries that the script requires.
+import discord # The Discord API wrapper for Python.
+from discord.ext import commands # The cool command framework.
 from discord.ext.commands import bot
 import asyncio
 import configparser
@@ -12,12 +13,16 @@ import os
 import traceback
 import random
 
+# Change the directory to the bot's home directory to be able to access things.
 dir_path = os.path.dirname(os.path.realpath(__file__))
 os.chdir(dir_path)
 
+# Read the settings configuration file
 config = configparser.SafeConfigParser()
 config.read('settings.ini')
 
+# Check if the file has the [main] section, which stores the values.
+# If not, creare it.
 if config.has_section('main'):
     pass
 else:
@@ -28,24 +33,28 @@ else:
     with open('settings.ini', 'w') as f:
         config.write(f)
 
-token = config.get('main', 'token')
-prefix = config.get('main','prefix')
-desc = config.get('main', 'desc')
+token = config.get('main', 'token') # Set the bot token from the config
+prefix = config.get('main','prefix') # Set the bot prefix from the config
+desc = config.get('main', 'desc') # Set the bot description from the config
 
 bot = commands.Bot(command_prefix=prefix, description=desc)
 
+# This runs every time a message is sent. This one specifically checks to see
+# if the message starts with "git gud" and sends a witty response.
 @bot.event
 async def on_message(message):
     message2 = str(message.content).lower()
     if message2.startswith('git gud'):
         await bot.send_message(message.channel, 'git: \'gud\' is not a git command. See \'git --help\'')
 
-    await bot.process_commands(message)
+    await bot.process_commands(message) # Without this line, commands would no longer work as it just looks at message content instead.
 
+# When the bot is ready, print "{bot name} is running!" to the command line.
 @bot.event
 async def on_ready():
         print("{} is running!".format(bot.user.name))
 
+# When a member joins, send a random greeting from the "greetings" array.
 @bot.event
 async def on_member_join(member):
     greetings = ['Hello there! You are a bold one, {0.mention}!'.format(member),
@@ -63,12 +72,14 @@ async def on_member_join(member):
                       'read the #rules! Enjoy your stay!'
     await bot.send_message(bot.get_channel('429756378542768129'), '{}'.format(greeting) + '{}'.format(welcome_message))
 
+# When someone leaves (;-;) send a random goodbye.
 @bot.event
 async def on_member_remove(member):
     goodbyes = ['Goodbye, ','See ya, ','Bye, ','Sorry to see you go, ']
     bye = random.choice(goodbyes)
     await bot.send_message(bot.get_channel('429756378542768129'), '{}'.format(bye) + '{}!'.format(member))
 
+# The currently very broken error handler. It only half works. Don't bother sacrificing your sanity to fix it.
 @bot.event
 async def on_command_error(error, ctx):
     if isinstance(error, commands.errors.CommandNotFound):
@@ -106,6 +117,7 @@ async def on_command_error(error, ctx):
         print(''.join(tb))
         # await bot.send_message(ctx.message.channel, embed=embed)
 
+# Queue the various addons in the "addons" folder to be loaded.
 addons = [
     'addons.testing',
     'addons.load',
@@ -119,6 +131,7 @@ addons = [
 
 failed_addons = []
 
+# Actually attempt to load the addons.
 for extension in addons:
     try:
         bot.load_extension(extension)
@@ -126,4 +139,5 @@ for extension in addons:
         print('{} failed to load.\n{}: {}'.format(extension, type(e).__name__, e))
         failed_addons.append([extension, type(e).__name__, e])
 
+# Start the bot.
 bot.run(token)

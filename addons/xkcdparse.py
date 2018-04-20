@@ -35,12 +35,11 @@ class xkcdparse:
         "real programmers": 378
     }
 
-    @commands.command()
+    @commands.command(pass_context=True, brief='Grabs an xkcd by number, latest, or random')
     async def xkcd(self, *, comic):
         comic = comic.lower()
         """Show xkcd comic by number. Use "latest" to show the latest comic, or "random" to show a random comic."""
         if comic == "latest":
-            # await self.bot.say("https://xkcd.com/{}/".format(xkcd.getLatestComic().number))
             comicpage = "https://xkcd.com/{}/".format(xkcd.getLatestComic().number)
             page = requests.get(comicpage).content
             soup = BeautifulSoup(page, "html.parser")
@@ -52,7 +51,6 @@ class xkcdparse:
             await self.bot.say(embed=embed)
 
         elif comic == "random":
-            # await self.bot.say("https://xkcd.com/{}/".format(xkcd.getRandomComic().number))
             comicpage = "https://xkcd.com/{}/".format(xkcd.getRandomComic().number)
             page = requests.get(comicpage).content
             soup = BeautifulSoup(page, "html.parser")
