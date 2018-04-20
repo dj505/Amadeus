@@ -113,7 +113,8 @@ addons = [
     'addons.xkcdparse',
     'addons.modutils',
     'addons.fun',
-    'addons.shop'
+    'addons.shop',
+    'addons.settings'
 ]
 
 failed_addons = []

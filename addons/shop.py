@@ -20,7 +20,7 @@ class Shop:
                                                                                'This is not a publicly assignable role.', color=0xFF0000)
             embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
             await self.bot.say(embed=embed)
-        elif str(role).lower() == 'members':
+        elif str(role).lower() == 'members'or str(role).lower() == 'spoilers':
             await self.bot.add_roles(member, role)
             embed = discord.Embed(title='Set role!', description='You have successfully been assigned the {} role!'.format(role), color=0x00FF99)
             await self.bot.say(embed=embed)
