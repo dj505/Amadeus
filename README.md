@@ -1,4 +1,4 @@
-# MakiseKurisu
+# Amadeus
 Another version of my Discord bot, with extra features, meant for the server [Future Studio](https://discord.gg/HbmunrE)!
 
 ## What can it do?
