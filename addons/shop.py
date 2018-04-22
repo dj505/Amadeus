@@ -5,7 +5,7 @@ from configparser import SafeConfigParser
 
 class Shop:
     '''
-    Making sure things actually work using one handy module
+    WIP shop.
     '''
     def __init__(self, bot):
         self.bot = bot

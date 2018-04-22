@@ -119,5 +119,24 @@ class ModUtils:
             await asyncio.sleep(3)
             await self.bot.delete_message(done_message)
 
+    @commands.has_permissions(ban_members=True)
+    @commands.command(pass_context=True, brief='Removes a reaction gif entry', aliases=['delreact','removereact','killreact'])
+    async def deletereact(self, ctx, reaction):
+        '''
+        Removes a reaction gif or entry from the list.
+        '''
+        config = SafeConfigParser()
+        config.read('reactions.ini')
+        if config.has_option('gifs','{}'.format(reaction)):
+            config.remove_option('gifs','{}'.format(reaction))
+            with open('reactions.ini','w') as f:
+                config.write(f)
+            embed = discord.Embed(title='Removed a reaction!', description='Your reaction has been successfully removed.', color=0x00FF99)
+            await self.bot.say(embed=embed)
+        else:
+            embed = discord.Embed(title='I could not find that reaction!', description='Please enter a valid reaction or try again.', color=0xFF0000)
+            embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
+            await self.bot.say(embed=embed)
+
 def setup(bot):
     bot.add_cog(ModUtils(bot))

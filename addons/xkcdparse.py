@@ -7,6 +7,11 @@ from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
 
+# First off, this is 100% overcomplicated because I'm lazy
+# I am sorry in advance
+# I should really just make a function to do things easier
+# But I won't because lazy
+
 class xkcdparse:
     """
     xkcd parser! Gets either a random comic, specified by number, or specified by keyword.
@@ -62,7 +67,6 @@ class xkcdparse:
             await self.bot.say(embed=embed)
 
         elif comic.isdigit():
-            # await self.bot.say("https://xkcd.com/{}/".format(xkcd.getComic(comic).number))
             comicpage = "https://xkcd.com/{}/".format(xkcd.getComic(comic).number)
             page = requests.get(comicpage).content
             soup = BeautifulSoup(page, "html.parser")
@@ -75,7 +79,6 @@ class xkcdparse:
 
 
         elif comic in self.word_responses:
-            # await self.bot.say("https://xkcd.com/{}/".format(xkcd.getComic(self.word_responses[comic]).number))
             comicpage = "https://xkcd.com/{}/".format(xkcd.getComic(self.word_responses[comic]).number)
             page = requests.get(comicpage).content
             soup = BeautifulSoup(page, "html.parser")

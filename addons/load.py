@@ -11,7 +11,6 @@ class Load:
         self.bot = bot
         print('Addon "{}" loaded'.format(self.__class__.__name__))
 
-    # Load test
     @commands.has_permissions(ban_members=True)
     @commands.command(hidden=True)
     async def load(self, *, module : str):
