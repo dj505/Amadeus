@@ -87,7 +87,7 @@ async def on_command_error(error, ctx):
         embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
         await bot.send_message(ctx.message.channel, embed=embed)
 
-    if isinstance(error, commands.errors.CheckFailure):
+    elif isinstance(error, commands.errors.CheckFailure):
         embed = discord.Embed(title='Permissions error!', description='You do not have permission to use this command.', color=0xFF0000)
         embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
         await bot.send_message(ctx.message.channel, embed=embed)
