@@ -136,7 +136,8 @@ addons = [
     'addons.modutils',
     'addons.fun',
     'addons.shop',
-    'addons.settings'
+    'addons.settings',
+    'addons.animelist'
 ]
 
 failed_addons = []

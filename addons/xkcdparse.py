@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 # I should really just make a function to do things easier
 # But I won't because lazy
 
-class xkcdparse:
+class xkcd:
     """
     xkcd parser! Gets either a random comic, specified by number, or specified by keyword.
     """
@@ -93,4 +93,4 @@ class xkcdparse:
             await self.bot.say("I can't find that one!")
 
 def setup(bot):
-    bot.add_cog(xkcdparse(bot))
+    bot.add_cog(xkcd(bot))
