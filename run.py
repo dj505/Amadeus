@@ -52,7 +52,17 @@ async def on_message(message):
 # When the bot is ready, print "{bot name} is running!" to the command line.
 @bot.event
 async def on_ready():
-        print("{} is running!".format(bot.user.name))
+    print("Creating server config directories if they don't exist...")
+    for server in bot.servers:
+        bot.server = server
+        if not os.path.exists('./{}'.format(bot.server.id)):
+            os.makedirs('./{}'.format(bot.server.id))
+            with open('{}\\reactions.ini'.format(bot.server.id),'w+') as f:
+                f.write('[gifs]\n')
+            print("Directory {} created with default configs.".format(bot.server.id))
+        else:
+            print("No new directories to create!")
+    print("{} is running!".format(bot.user.name))
 
 # When a member joins, send a random greeting from the "greetings" array.
 @bot.event

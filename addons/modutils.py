@@ -138,5 +138,19 @@ class ModUtils:
             embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
             await self.bot.say(embed=embed)
 
+    @commands.has_permissions(ban_members=True)
+    @commands.command(pass_context=True, brief='Bad pun.')
+    async def badpun(self, ctx, member: discord.Member):
+        role = discord.utils.get(self.bot.server.roles, name="bad pun")
+        await self.bot.add_roles(member, role)
+        await self.bot.say('Bad pun, {0.mention}'.format(member))
+
+    @commands.has_permissions(ban_members=True)
+    @commands.command(pass_context=True, brief='Bad pun.')
+    async def unbadpun(self, ctx, member: discord.Member):
+        role = discord.utils.get(self.bot.server.roles, name="bad pun")
+        await self.bot.remove_roles(member, role)
+        await self.bot.say('Your bad pun has been forgiven, {0.mention}'.format(member))
+
 def setup(bot):
     bot.add_cog(ModUtils(bot))
