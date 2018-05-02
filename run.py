@@ -22,7 +22,7 @@ config = configparser.SafeConfigParser()
 config.read('settings.ini')
 
 # Check if the file has the [main] section, which stores the values.
-# If not, creare it.
+# If not, create it.
 if config.has_section('main'):
     pass
 else:
