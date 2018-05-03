@@ -35,7 +35,7 @@ class AnimeList:
         await self.bot.say(embed=embed)
 
     @commands.command(pass_context="True",brief="Gets information on a given anime in the list")
-    async def animedesc(self, ctx, *anime):
+    async def animedesc(self, ctx, anime):
         config = SafeConfigParser()
         config.read('anime.ini')
         if config.has_option('anime','{}'.format(anime)):
@@ -48,7 +48,7 @@ class AnimeList:
             await self.bot.say(embed=embed)
 
     @commands.command(pass_context="true",brief="Adds an anime to the list",aliases=['addanime'])
-    async def animeadd(self, ctx, *anime):
+    async def animeadd(self, ctx, anime):
         """
         Adds an anime to the list.
         """
