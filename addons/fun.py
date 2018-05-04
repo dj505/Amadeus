@@ -39,7 +39,7 @@ class Fun:
         await self.bot.say(embed=embed)
 
     @commands.command(brief='Roll a plain D20.')
-    async def rollfor(self):
+    async def d20(self):
         result = random.randint(1,20)
         embed = discord.Embed(name='D20 roll!',description='Your result is...', color=0xFF0000)
         embed.set_author(name='D20 roll!')
@@ -63,7 +63,7 @@ class Fun:
     @commands.command(brief='Roll a D20 for a specified stat!')
     async def rollfor(self, *stat):
         result = random.randint(1,20)
-        embed = discord.Embed(name='D20 roll!',description='Your result for {} is...'.format(stat), color=0xFF0000)
+        embed = discord.Embed(name='D20 roll!',description='Your result for {} is...'.format(' '.join(str(i) for i in stat)), color=0xFF0000)
         embed.set_author(name='D20 roll!')
         embed.set_thumbnail(url='https://i.imgur.com/s2qFxaa.png')
         if result <= 5:
