@@ -154,7 +154,7 @@ class Utils:
                                                                             without permissions by using the bot as a loophole.', color=0xFF0000)
             embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
             await self.bot.say(embed=embed)
-
+            
         else:
             await self.bot.say(message_string_parser(ctx.message.content))
             await self.bot.delete_message(ctx.message)
@@ -165,12 +165,17 @@ class Utils:
         embed.set_image(url=user.avatar_url)
         await self.bot.say(embed=embed)
 
+    @commands.command(pass_context=True, brief='Leaderboard!')
+    async def leaderboard(self, ctx):
+        await self.bot.say("This is still a WIP.")
+
 def message_string_parser(message):
     return(message[message.find(' ')+1:])
     # chucknorify17's biggest contribution to this repo
     # Literally just gets the contents of the message after the prefix/command
     # by finding the first space and returning everything after it
     # I think the only thing that uses it is the say command
+    # Yet it's stilly surprisingly useful
 
 def setup(bot):
     bot.add_cog(Utils(bot))

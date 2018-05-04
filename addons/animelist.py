@@ -29,7 +29,7 @@ class AnimeList:
         for x in animelist:
             anime.append(str(x))
         for elem in anime:
-            bot_message += '{}\n'.format(elem)
+            bot_message += '{}\n'.format(elem.title())
         bot_message += '```'
         embed = discord.Embed(title='Anime', description=bot_message, color=0x00FF99)
         await self.bot.say(embed=embed)

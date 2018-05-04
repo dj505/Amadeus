@@ -2,6 +2,15 @@ import discord
 from discord.ext import commands
 import configparser
 from configparser import SafeConfigParser
+import os
+
+if not os.path.isfile('./shop.ini'):
+    print('Creating shop.ini...')
+    with open('shop.ini','w+') as f:
+        f.write('[Weapons]\nStarter Sword = [10, 100]\n')
+        f.write('[Defense]\nStarter Armor = [10, 100]\n')
+else:
+    print('shop.ini exists, no need to create')
 
 class Shop:
     '''
@@ -11,7 +20,7 @@ class Shop:
         self.bot = bot
         print('Addon "{}" loaded'.format(self.__class__.__name__))
 
-    @commands.command(pass_context=True, brief='Purchase a role for 100 credits, or assign yorself the free Members role')
+    @commands.command(pass_context=True, brief='Purchase a role for 100 credits or get the free Members role')
     async def role(self, ctx, role: discord.Role):
         assignable_roles = ['Blue','Turqoise','Green','Yellow','Orange','Pink','Purple','Grey','Black','DarkRed','DarkGreen','Magenta']
         member = ctx.message.author
@@ -65,12 +74,91 @@ class Shop:
         await self.bot.say(embed=embed)
 
     @commands.command(pass_context=True, brief='The main shop.', aliases=['buy','store'])
-    async def shop(self, ctx, item):
+    async def shop(self, ctx):
         '''
         This is where you buy most of the things.
         '''
-        embed = discord.Embed(title='Work In Progress', description='This command is still a heavy WIP. Please wait.', color=0x00FF99)
+        embed = discord.Embed(title='Work In Progress', description='This command is still a heavy WIP. Do not use it seriously yet.', color=0x00FF99)
         await self.bot.say(embed=embed)
+        config = SafeConfigParser()
+        config.read('shop.ini')
+        weaponlist = {k:v for k,v in config.items('Weapons')}
+        armorlist = {k:v for k,v in config.items('Defense')}
+        heallist = {k:v for k,v in config.items('Healing')}
+        weapons = []
+        armors = []
+        heal = []
+        bot_message='```\nWeapons:\n'
+        for x in weaponlist:
+            weapons.append(str(x))
+        for elem in weapons:
+            bot_message += '    {}\n'.format(elem.title())
+            bot_message += '      {} Damage\n'.format(get_weapon_power(elem))
+            bot_message += '      {} Credits\n'.format(get_weapon_price(elem))
+        bot_message += 'Defense:\n'
+        for x in armorlist:
+            armors.append(str(x))
+        for elem in armors:
+            bot_message += '    {}\n'.format(elem.title())
+            bot_message += '      {} Damage\n'.format(get_armor_power(elem))
+            bot_message += '      {} Credits\n'.format(get_armor_price(elem))
+        bot_message += 'Healing:\n'
+        for x in heallist:
+            heal.append(str(x))
+        for elem in heal:
+            bot_message += '    {}\n'.format(elem.title())
+            bot_message += '      Restores {} HP\n'.format(get_heal_power(elem))
+            bot_message += '      {} Credits\n'.format(get_heal_price(elem))
+        bot_message += '```'
+        embed = discord.Embed(title='Shop List', description=bot_message, color=0x00FF99)
+        await self.bot.say(embed=embed)
+
+    @commands.command(pass_context=True, brief='Purcahse armor')
+    async def buyweapon(self, ctx, item):
+        price = get_weapon_price(item)
+        await self.bot.say('This item costs {} credits.'.format(price))
+
+def get_weapon_price(item):
+    config = SafeConfigParser()
+    config.read('shop.ini')
+    statlist = config.get('Weapons', item)
+    statlist = statlist.split(' ')
+    return statlist[1]
+
+def get_armor_price(item):
+    config = SafeConfigParser()
+    config.read('shop.ini')
+    statlist = config.get('Defense', item)
+    statlist = statlist.split(' ')
+    return statlist[1]
+
+def get_heal_price(item):
+    config = SafeConfigParser()
+    config.read('shop.ini')
+    statlist = config.get('Healing', item)
+    statlist = statlist.split(' ')
+    return statlist[1]
+
+def get_weapon_power(item):
+    config = SafeConfigParser()
+    config.read('shop.ini')
+    statlist = config.get('Weapons', item)
+    statlist = statlist.split(' ')
+    return statlist[0]
+
+def get_armor_power(item):
+    config = SafeConfigParser()
+    config.read('shop.ini')
+    statlist = config.get('Defense', item)
+    statlist = statlist.split(' ')
+    return statlist[0]
+
+def get_heal_power(item):
+    config = SafeConfigParser()
+    config.read('shop.ini')
+    statlist = config.get('Healing', item)
+    statlist = statlist.split(' ')
+    return statlist[0]
 
 def get_balance(userid):
     config = SafeConfigParser()
