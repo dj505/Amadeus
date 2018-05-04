@@ -115,7 +115,10 @@ class Shop:
         embed = discord.Embed(title='The Shop', description=bot_message, color=0x00FF99)
         await self.bot.say(embed=embed)
 
-
+    # Fair warning. The following code is an absolute mess. I have no idea what I'm doing.
+    # configparser is definitely not the best for this. Idk how to use the json module tho.
+    # I apologize in advance. You have been warned. Carry on.
+    # Future me: fix this dammit
     @commands.command(pass_context=True, brief='Purchase a thing')
     async def purchase(self, ctx, category, item):
         config = SafeConfigParser()
@@ -156,6 +159,31 @@ class Shop:
                 else:
                     embed = discord.Embed(title='No Wallet', description='You do not have an existing wallet or balance! Please run the `daily` command.', color=0xFF0000)
                     await self.bot.say(embed=embed)
+            if category.lower() == "defense" or category.lower() == "armor":
+                price = get_armor_price(item)
+                price = int(price)
+                user = ctx.message.author.id
+                config.read('wallet.ini')
+                if config.has_section('{}'.format(user)):
+                    balance = int(config.get('{}'.format(user), 'balance'))
+                    balance = balance - price
+                    config.set('{}'.format(user), 'balance', "{}".format(balance))
+                    with open('wallet.ini','w') as f:
+                        config.write(f)
+                    config = SafeConfigParser()
+                    config.read('{}_inv.ini'.format(ctx.message.author.id))
+                    arsenal = config.get('Defense','inv')
+                    arsenal = arsenal.split(',')
+                    if item in arsenal:
+                        await self.bot.say('You already have this!')
+                    else:
+                        arsenal.append('"{}"'.format(item))
+                        arsenal = ','.join(arsenal)
+                        config.set('Defense','inv',arsenal)
+                        with open('{}_inv.ini'.format(ctx.message.author.id),'w') as f:
+                            config.write(f)
+                        embed = discord.Embed(title='Item Get!', description='You have received 1 "{}"!'.format(item), color=0x00FF99)
+                        await self.bot.say(embed=embed)
             else:
                 await self.bot.say('Please enter a valid category.')
 
