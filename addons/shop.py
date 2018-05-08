@@ -118,7 +118,7 @@ class Shop:
     # Fair warning. The following code is an absolute mess. I have no idea what I'm doing.
     # configparser is definitely not the best for this. Idk how to use the json module tho.
     # I apologize in advance. You have been warned. Carry on.
-    # Future me: fix this dammit
+    # Dear future me: fix this dammit
     @commands.command(pass_context=True, brief='Purchase a thing')
     async def purchase(self, ctx, category, item):
         config = SafeConfigParser()
