@@ -34,7 +34,7 @@ else:
         config.write(f)
 
 token = config.get('main', 'token') # Set the bot token from the config
-prefix = config.get('main','prefix') # Set the bot prefix from the config
+prefix = config.get('main', 'prefix') # Set the bot prefix from the config
 desc = config.get('main', 'desc') # Set the bot description from the config
 
 bot = commands.Bot(command_prefix=prefix, description=desc)

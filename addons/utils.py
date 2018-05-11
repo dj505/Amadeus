@@ -139,7 +139,7 @@ class Utils:
         embed.set_thumbnail(url=ctx.message.server.icon_url)
         await self.bot.say(embed=embed)
 
-    @commands.command(pass_context=True, brief='A Link to the Source')
+    @commands.command(pass_context=True, brief='A Link to the Source', aliases=['sauce'])
     async def source(self, ctx):
         embed = discord.Embed(title='Bot Source Code', description='Have some spaghetti!', color=0x00FF99)
         embed.set_thumbnail(url='https://opensource.org/files/osi_keyhole_600X600_90ppi.png')
@@ -154,7 +154,6 @@ class Utils:
                                                                             without permissions by using the bot as a loophole.', color=0xFF0000)
             embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
             await self.bot.say(embed=embed)
-            
         else:
             await self.bot.say(message_string_parser(ctx.message.content))
             await self.bot.delete_message(ctx.message)
