@@ -50,18 +50,19 @@ async def on_message(message):
     if message2.startswith('git gud'):
         await bot.send_message(message.channel, 'git: \'gud\' is not a git command. See \'git --help\'')
 
-    if config.has_section('{}'.format(user)):
-        xp = config.get('{}'.format(user), 'xp')
-        xp = int(xp)
-        config.set('{}'.format(user), 'xp', str(xp + 1))
-        with open('xp.ini', 'w') as f:
-            config.write(f)
-    else:
-        config.add_section('{}'.format(user))
-        config.set('{}'.format(user), 'xp', '1')
-        with open('xp.ini', 'w') as f:
-            config.write(f)
-        print('Created xp entry for {}'.format(user))
+    if(not message.author.bot):
+        if config.has_section('{}'.format(user)):
+            xp = config.get('{}'.format(user), 'xp')
+            xp = int(xp)
+            config.set('{}'.format(user), 'xp', str(xp + 1))
+            with open('xp.ini', 'w') as f:
+                config.write(f)
+        else:
+            config.add_section('{}'.format(user))
+            config.set('{}'.format(user), 'xp', '1')
+            with open('xp.ini', 'w') as f:
+                config.write(f)
+            print('Created xp entry for {}'.format(user))
 
     await bot.process_commands(message) # Without this line, commands would no longer work.
 
