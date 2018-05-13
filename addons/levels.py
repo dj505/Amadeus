@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
-import datetime
-import time
+from configparser import SafeConfigParser
 
 class Levels:
     '''
@@ -12,11 +11,15 @@ class Levels:
         print('Addon "{}" loaded'.format(self.__class__.__name__))
 
     @commands.command(pass_context=True)
-    async def leaderboard(self, ctx):
+    async def xp(self, ctx):
         """
-        Displays the leaderboard. Does not work yet.
+        Displays your xp.
         """
-        await self.bot.say("This command does not work yet.")
+        user = ctx.message.author.id
+        config = SafeConfigParser()
+        config.read('xp.ini')
+        xp = config.get('{}'.format(user), 'xp')
+        await self.bot.say('You have {} xp.'.format(xp))
 
 def setup(bot):
     bot.add_cog(Levels(bot))
