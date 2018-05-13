@@ -43,11 +43,27 @@ bot = commands.Bot(command_prefix=prefix, description=desc)
 # if the message starts with "git gud" and sends a witty response.
 @bot.event
 async def on_message(message):
+    config = SafeConfigParser()
+    config.read('xp.ini')
+    user = message.author.id
     message2 = str(message.content).lower()
     if message2.startswith('git gud'):
         await bot.send_message(message.channel, 'git: \'gud\' is not a git command. See \'git --help\'')
 
-    await bot.process_commands(message) # Without this line, commands would no longer work as it just looks at message content instead.
+    if config.has_section('{}'.format(user)):
+        xp = config.get('{}'.format(user), 'xp')
+        xp = int(xp)
+        config.set('{}'.format(user), 'xp', str(xp + 1))
+        with open('xp.ini', 'w') as f:
+            config.write(f)
+    else:
+        config.add_section('{}'.format(user))
+        config.set('{}'.format(user), 'xp', '1')
+        with open('xp.ini', 'w') as f:
+            config.write(f)
+        print('Created xp entry for {}'.format(user))
+
+    await bot.process_commands(message) # Without this line, commands would no longer work.
 
 # When the bot is ready, print "{bot name} is running!" to the command line.
 @bot.event
