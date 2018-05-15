@@ -95,22 +95,22 @@ class Shop:
             weapons.append(str(x))
         for elem in weapons:
             bot_message += '  {}\n'.format(elem.title())
-            bot_message += '    {} Damage\n'.format(get_weapon_power(elem))
-            bot_message += '    {} Credits\n'.format(get_weapon_price(elem))
+            bot_message += '    {} Damage\n'.format(get_power('Weapons', elem))
+            bot_message += '    {} Credits\n'.format(get_price('Weapons', elem))
         bot_message += '\n-Defense-\n'
         for x in armorlist:
             armors.append(str(x))
         for elem in armors:
             bot_message += '  {}\n'.format(elem.title())
-            bot_message += '    {} Defense\n'.format(get_armor_power(elem))
-            bot_message += '    {} Credits\n'.format(get_armor_price(elem))
+            bot_message += '    {} Defense\n'.format(get_power('Defense', elem))
+            bot_message += '    {} Credits\n'.format(get_price('Defense', elem))
         bot_message += '\n-Healing-\n'
         for x in heallist:
             heal.append(str(x))
         for elem in heal:
             bot_message += '  {}\n'.format(elem.title())
-            bot_message += '    Restores {} HP\n'.format(get_heal_power(elem))
-            bot_message += '    {} Credits\n'.format(get_heal_price(elem))
+            bot_message += '    Restores {} HP\n'.format(get_power('Healing', elem))
+            bot_message += '    {} Credits\n'.format(get_price('Healing', elem))
         bot_message += '```'
         embed = discord.Embed(title='The Shop', description=bot_message, color=0x00FF99)
         await self.bot.say(embed=embed)
@@ -121,6 +121,7 @@ class Shop:
     # Dear future me: fix this dammit
     @commands.command(pass_context=True, brief='Purchase a thing')
     async def purchase(self, ctx, category, item):
+        await self.bot.say('This command is incomplete. Do not purchase anything yet.')
         config = SafeConfigParser()
         if not os.path.isfile('./{}_inv.ini'.format(str(ctx.message.author.id))):
             message = await self.bot.say('Creating inventory...')
@@ -131,102 +132,35 @@ class Shop:
             time.sleep(0.5)
             message = await self.bot.edit_message(message, 'Inventory created! Please run the command again.')
         else:
-            if category.lower() == "weapon" or category.lower() == "weapons":
-                price = get_weapon_price(item)
-                price = int(price)
-                user = ctx.message.author.id
-                config.read('wallet.ini')
-                if config.has_section('{}'.format(user)):
-                    balance = int(config.get('{}'.format(user), 'balance'))
+            price = get_price(category, item)
+            price = int(price)
+            user = ctx.message.author.id
+            config.read('wallet.ini')
+            if config.has_section('{}'.format(user)):
+                balance = int(config.get('{}'.format(user), 'balance'))
+                if balance >= price:
                     balance = balance - price
                     config.set('{}'.format(user), 'balance', "{}".format(balance))
                     with open('wallet.ini','w') as f:
                         config.write(f)
-                    config = SafeConfigParser()
-                    config.read('{}_inv.ini'.format(ctx.message.author.id))
-                    arsenal = config.get('Weapons','inv')
-                    arsenal = arsenal.split(',')
-                    if item in arsenal:
-                        await self.bot.say('You already have this!')
-                    else:
-                        arsenal.append('"{}"'.format(item))
-                        arsenal = ','.join(arsenal)
-                        config.set('Weapons','inv',arsenal)
-                        with open('{}_inv.ini'.format(ctx.message.author.id),'w') as f:
-                            config.write(f)
-                        embed = discord.Embed(title='Item Get!', description='You have received 1 "{}"!'.format(item), color=0x00FF99)
-                        await self.bot.say(embed=embed)
+                    confirmation = await self.bot.say('Balance subtracted...')
+                    handle_purchase(ctx.message.author.id, item)
                 else:
-                    embed = discord.Embed(title='No Wallet', description='You do not have an existing wallet or balance! Please run the `daily` command.', color=0xFF0000)
-                    await self.bot.say(embed=embed)
-            if category.lower() == "defense" or category.lower() == "armor":
-                price = get_armor_price(item)
-                price = int(price)
-                user = ctx.message.author.id
-                config.read('wallet.ini')
-                if config.has_section('{}'.format(user)):
-                    balance = int(config.get('{}'.format(user), 'balance'))
-                    balance = balance - price
-                    config.set('{}'.format(user), 'balance', "{}".format(balance))
-                    with open('wallet.ini','w') as f:
-                        config.write(f)
-                    config = SafeConfigParser()
-                    config.read('{}_inv.ini'.format(ctx.message.author.id))
-                    arsenal = config.get('Defense','inv')
-                    arsenal = arsenal.split(',')
-                    if item in arsenal:
-                        await self.bot.say('You already have this!')
-                    else:
-                        arsenal.append('"{}"'.format(item))
-                        arsenal = ','.join(arsenal)
-                        config.set('Defense','inv',arsenal)
-                        with open('{}_inv.ini'.format(ctx.message.author.id),'w') as f:
-                            config.write(f)
-                        embed = discord.Embed(title='Item Get!', description='You have received 1 "{}"!'.format(item), color=0x00FF99)
-                        await self.bot.say(embed=embed)
+                    await self.bot.say('You can\'t afford this!')
             else:
-                await self.bot.say('Please enter a valid category.')
+                await self.bot.say('You don\'t have a wallet!')
 
-
-def get_weapon_price(item):
+def get_price(category, item):
     config = SafeConfigParser()
     config.read('shop.ini')
-    statlist = config.get('Weapons', item)
+    statlist = config.get(category, item)
     statlist = statlist.split(' ')
     return statlist[1]
 
-def get_armor_price(item):
+def get_power(category, item):
     config = SafeConfigParser()
     config.read('shop.ini')
-    statlist = config.get('Defense', item)
-    statlist = statlist.split(' ')
-    return statlist[1]
-
-def get_heal_price(item):
-    config = SafeConfigParser()
-    config.read('shop.ini')
-    statlist = config.get('Healing', item)
-    statlist = statlist.split(' ')
-    return statlist[1]
-
-def get_weapon_power(item):
-    config = SafeConfigParser()
-    config.read('shop.ini')
-    statlist = config.get('Weapons', item)
-    statlist = statlist.split(' ')
-    return statlist[0]
-
-def get_armor_power(item):
-    config = SafeConfigParser()
-    config.read('shop.ini')
-    statlist = config.get('Defense', item)
-    statlist = statlist.split(' ')
-    return statlist[0]
-
-def get_heal_power(item):
-    config = SafeConfigParser()
-    config.read('shop.ini')
-    statlist = config.get('Healing', item)
+    statlist = config.get(category, item)
     statlist = statlist.split(' ')
     return statlist[0]
 
@@ -235,6 +169,10 @@ def get_balance(userid):
     config.read('wallet.ini')
     balance = config.get(userid, 'balance')
     return int(balance)
+
+def handle_purchase(id, item):
+    config = SafeConfigParser()
+    config.read('{}_inv.ini'.format(id))
 
 def setup(bot):
     bot.add_cog(Shop(bot))

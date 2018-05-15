@@ -69,14 +69,14 @@ async def on_message(message):
 # When the bot is ready, print "{bot name} is running!" to the command line.
 @bot.event
 async def on_ready():
-    print("Creating server config directories if they don't exist...")
-    for server in bot.servers:
-        bot.server = server
-        if not os.path.exists('./{}'.format(bot.server.id)):
-            os.makedirs('./{}'.format(bot.server.id))
-            with open('{}\\reactions.ini'.format(bot.server.id),'w+') as f:
-                f.write('[gifs]\n')
-            print("Directory {} created with default configs.".format(bot.server.id))
+    print("Creating server config directories if they don't exist...") # Not a lot of use for this yet
+    for server in bot.servers: # Seriously
+        bot.server = server # It just creates some folders
+        if not os.path.exists('./{}'.format(bot.server.id)): # None of them are even used yet
+            os.makedirs('./{}'.format(bot.server.id)) # idk what to use them for
+            with open('{}\\reactions.ini'.format(bot.server.id),'w+') as f: # I had an idea before but it didn't work
+                f.write('[gifs]\n') # So I guess I'll figure something out eventually
+            print("Directory {} created with default configs.".format(bot.server.id)) # ¯\_(ツ)_/¯
         else:
             print("No new directories to create!")
     print("{} is running!".format(bot.user.name))
@@ -106,7 +106,8 @@ async def on_member_remove(member):
     bye = random.choice(goodbyes)
     await bot.send_message(bot.get_channel('429756378542768129'), '{}'.format(bye) + '{}!'.format(member))
 
-# The currently very broken error handler. It only half works. Don't bother sacrificing your sanity to fix it.
+# The currently very broken error handler. It only mostly works. Don't bother sacrificing your sanity to fix it.
+# Trust me. I tried.
 @bot.event
 async def on_command_error(error, ctx):
     if isinstance(error, commands.errors.CommandNotFound):
@@ -137,12 +138,12 @@ async def on_command_error(error, ctx):
         await bot.delete_message(message)
 
     else:
-        # embed = discord.Embed(title='Error!', description='An error occured processing that command.', color=0xFF0000)
-        # embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
+        embed = discord.Embed(title='Error!', description='An error occured processing that command.', color=0xFF0000)
+        embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
         print('Ignoring exception in command {0.command} in {0.message.channel}'.format(ctx))
         tb = traceback.format_exception(type(error), error, error.__traceback__)
         print(''.join(tb))
-        # await bot.send_message(ctx.message.channel, embed=embed)
+        await bot.send_message(ctx.message.channel, embed=embed)
 
 # Queue the various addons in the "addons" folder to be loaded.
 addons = [
