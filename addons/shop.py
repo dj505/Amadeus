@@ -144,7 +144,7 @@ class Shop:
                     with open('wallet.ini','w') as f:
                         config.write(f)
                     confirmation = await self.bot.say('Balance subtracted...')
-                    handle_purchase(ctx.message.author.id, item)
+                    handle_purchase(category, ctx.message.author.id, item)
                     confirmation.edit('Purchased!')
                 else:
                     await self.bot.say('You can\'t afford this!')
@@ -152,6 +152,7 @@ class Shop:
                 await self.bot.say('You don\'t have a wallet!')
 
 def get_price(category, item):
+    category = category.title()
     config = SafeConfigParser()
     config.read('shop.ini')
     statlist = config.get(category, item)
@@ -159,6 +160,7 @@ def get_price(category, item):
     return statlist[1]
 
 def get_power(category, item):
+    category = category.title()
     config = SafeConfigParser()
     config.read('shop.ini')
     statlist = config.get(category, item)
@@ -171,9 +173,17 @@ def get_balance(userid):
     balance = config.get(userid, 'balance')
     return int(balance)
 
-def handle_purchase(id, item):
+def handle_purchase(category, id, item):
+    category = category.title()
     config = SafeConfigParser()
     config.read('{}_inv.ini'.format(id))
+    inv = config.get(category, 'inv')
+    eq = config.get(category, 'equipped')
+    inv = inv.split(',')
+    if item in inv or item == eq:
+        await self.bot.say('You already own one of these!')
+    else:
+        inv.append(item)
 
 def setup(bot):
     bot.add_cog(Shop(bot))
