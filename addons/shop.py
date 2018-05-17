@@ -145,6 +145,7 @@ class Shop:
                         config.write(f)
                     confirmation = await self.bot.say('Balance subtracted...')
                     handle_purchase(ctx.message.author.id, item)
+                    confirmation.edit('Purchased!')
                 else:
                     await self.bot.say('You can\'t afford this!')
             else:
