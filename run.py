@@ -92,11 +92,11 @@ async def on_member_join(member):
                  'Yo, welcome to Future Studio, {0.mention}!'.format(member),
                  'Thanks for popping in, {0.mention}! Welcome to Future Studio!'.format(member)]
     greeting = random.choice(greetings)
-    welcome_message = '\n\nPlease feel free to introduce yourself! If none of the admins are around to assign the member role, ' \
-                      'use the command `k!role Members` (case sensitive) in #bot-commands and it\'ll be automatically assigned.' \
-                      ' If you\'d like a cool coloured role, use `k!daily` to get your daily 150 credits, and use `k!role colour' \
-                      '` to give yourself the role. Keep in mind this costs 100 credits! With that out of the way, remember to ' \
-                      'read the #rules! Enjoy your stay!'
+    welcome_message = '\n\nFor a quick tour of the server, check out #world-map! ' \
+                      'That\'s where you\'ll find all of the channels along with ' \
+                      'a description for each.\nAlso check out our self assignable' \
+                      ' roles with `.lsar`! These include username colours as well as ' \
+                      'roles that allow you to access specialized channels. Enjoy your stay!'
     await bot.send_message(bot.get_channel('429756378542768129'), '{}'.format(greeting) + '{}'.format(welcome_message))
 
 # When someone leaves (;-;) send a random goodbye.
