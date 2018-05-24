@@ -16,6 +16,7 @@ class Math:
         '''
         message = message_string_parser(ctx.message.content)
         numbers = message.split(' ')
+        print(numbers)
         answer = sum(numbers)
         await self.bot.say(str(answer))
 
