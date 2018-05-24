@@ -7,12 +7,7 @@ from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
 
-# First off, this is 100% overcomplicated because I'm lazy
-# I am sorry in advance
-# I should really just make a function to do things easier
-# But I won't because lazy
-
-class xkcd:
+class xkcdparse:
     """
     xkcd parser! Gets either a random comic, specified by number, or specified by keyword.
     """
@@ -40,11 +35,12 @@ class xkcd:
         "real programmers": 378
     }
 
-    @commands.command(pass_context=True, brief='Grabs an xkcd by number, latest, or random')
+    @commands.command()
     async def xkcd(self, *, comic):
         comic = comic.lower()
         """Show xkcd comic by number. Use "latest" to show the latest comic, or "random" to show a random comic."""
         if comic == "latest":
+            # await self.bot.say("https://xkcd.com/{}/".format(xkcd.getLatestComic().number))
             comicpage = "https://xkcd.com/{}/".format(xkcd.getLatestComic().number)
             page = requests.get(comicpage).content
             soup = BeautifulSoup(page, "html.parser")
@@ -56,6 +52,7 @@ class xkcd:
             await self.bot.say(embed=embed)
 
         elif comic == "random":
+            # await self.bot.say("https://xkcd.com/{}/".format(xkcd.getRandomComic().number))
             comicpage = "https://xkcd.com/{}/".format(xkcd.getRandomComic().number)
             page = requests.get(comicpage).content
             soup = BeautifulSoup(page, "html.parser")
@@ -67,6 +64,7 @@ class xkcd:
             await self.bot.say(embed=embed)
 
         elif comic.isdigit():
+            # await self.bot.say("https://xkcd.com/{}/".format(xkcd.getComic(comic).number))
             comicpage = "https://xkcd.com/{}/".format(xkcd.getComic(comic).number)
             page = requests.get(comicpage).content
             soup = BeautifulSoup(page, "html.parser")
@@ -79,6 +77,7 @@ class xkcd:
 
 
         elif comic in self.word_responses:
+            # await self.bot.say("https://xkcd.com/{}/".format(xkcd.getComic(self.word_responses[comic]).number))
             comicpage = "https://xkcd.com/{}/".format(xkcd.getComic(self.word_responses[comic]).number)
             page = requests.get(comicpage).content
             soup = BeautifulSoup(page, "html.parser")
@@ -93,4 +92,4 @@ class xkcd:
             await self.bot.say("I can't find that one!")
 
 def setup(bot):
-    bot.add_cog(xkcd(bot))
+    bot.add_cog(xkcdparse(bot))
