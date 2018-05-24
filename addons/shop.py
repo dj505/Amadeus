@@ -180,8 +180,7 @@ def handle_purchase(category, id, item):
     inv = config.get(category, 'inv')
     eq = config.get(category, 'equipped')
     inv = inv.split(',')
-    else:
-        inv.append(item)
+    inv.append(item)
 
 def setup(bot):
     bot.add_cog(Shop(bot))
