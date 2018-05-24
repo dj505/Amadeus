@@ -16,9 +16,11 @@ class Math:
         '''
         message = message_string_parser(ctx.message.content)
         numbers = message.split(' ')
-        print(numbers)
-        answer = sum(numbers)
-        await self.bot.say(str(answer))
+        sum = 0
+        for num in numbers:
+            num = int(num)
+            sum += num
+        await self.bot.say(str(sum))
 
 def setup(bot):
     bot.add_cog(Math(bot))
