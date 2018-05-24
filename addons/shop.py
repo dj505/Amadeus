@@ -180,8 +180,6 @@ def handle_purchase(category, id, item):
     inv = config.get(category, 'inv')
     eq = config.get(category, 'equipped')
     inv = inv.split(',')
-    if item in inv or item == eq:
-        await self.bot.say('You already own one of these!')
     else:
         inv.append(item)
 
