@@ -20,12 +20,16 @@ class Utils:
         print('Addon "{}" loaded'.format(self.__class__.__name__))
 
     @commands.command(pass_context="True",brief="Gets user information.")
-    async def userinfo(self, ctx, user: discord.Member):
+    async def userinfo(self, ctx, user: discord.Member=None):
         # I will try and explain this monstrosity of spaghetti
         # Probably many better ways to do this but I'm lazy and it works well enough
         """
         Allows you to get information on a user simply by tagging them.
         """
+        if user == None:
+            user = ctx.message.author
+        else:
+            user = user
         member = user.id
         config = SafeConfigParser()
         config.read('wallet.ini')
