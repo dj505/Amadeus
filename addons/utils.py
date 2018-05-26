@@ -159,10 +159,15 @@ class Utils:
             await self.bot.delete_message(ctx.message)
 
     @commands.command(pass_context=True, brief='Get user avatar')
-    async def avatar(self, ctx, user: discord.Member):
-        embed = discord.Embed(name='Avatar', description=None, color=0x000000)
-        embed.set_image(url=user.avatar_url)
-        await self.bot.say(embed=embed)
+    async def avatar(self, ctx, user: discord.Member=None):
+        if user != None:
+            embed = discord.Embed(name='Avatar', description=None, color=0x000000)
+            embed.set_image(url=user.avatar_url)
+            await self.bot.say(embed=embed)
+        else:
+            embed = discord.Embed(name='Avatar', description=None, color=0x000000)
+            embed.set_image(url=ctx.message.author.avatar_url)
+            await self.bot.say(embed=embed)
 
     @commands.command(pass_context=True, brief='Leaderboard!')
     async def leaderboard(self, ctx):
