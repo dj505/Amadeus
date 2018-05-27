@@ -26,6 +26,7 @@ class Utils:
         """
         Allows you to get information on a user simply by tagging them.
         """
+        await self.bot.send_typing(ctx.message.channel)
         if user == None:
             user = ctx.message.author
         else:
