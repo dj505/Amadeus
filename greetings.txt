@@ -5,3 +5,6 @@ Hey! Welcome, {0.mention}!
 Welcome to the server, {0.mention}
 Yo, welcome to Future Studio, {0.mention}!
 Thanks for popping in, {0.mention}! Welcome to Future Studio!
+Oh, it's you, {0.mention}. Welcome to the server!
+{0.mention} has joined the party! Welcome!
+Hey {0.mention}, you made it! Welcome!
