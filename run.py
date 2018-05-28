@@ -36,6 +36,10 @@ else:
 token = config.get('main', 'token') # Set the bot token from the config
 prefix = config.get('main', 'prefix') # Set the bot prefix from the config
 desc = config.get('main', 'desc') # Set the bot description from the config
+greeting = config.get('main','greeting') # See if greeting is enabled or disabled
+goodbye = config.get('main','goodbye') # See if goodbyes are enabled or disabled
+wc = config.get('main','welcomechannel') # Get welcome channel ID
+
 
 bot = commands.Bot(command_prefix=prefix, description=desc)
 
@@ -84,27 +88,26 @@ async def on_ready():
 # When a member joins, send a random greeting from the "greetings" array.
 @bot.event
 async def on_member_join(member):
-    greetings = ['Hello there! You are a bold one, {0.mention}!'.format(member),
-                 'Hey there, {0.mention}! Welcome to Future Studio!'.format(member),
-                 'Oh hi {0.mention}! Welcome to Future Studio!'.format(member),
-                 'Hey! Welcome, {0.mention}!'.format(member),
-                 'Welcome to the server, {0.mention}'.format(member),
-                 'Yo, welcome to Future Studio, {0.mention}!'.format(member),
-                 'Thanks for popping in, {0.mention}! Welcome to Future Studio!'.format(member)]
-    greeting = random.choice(greetings)
-    welcome_message = '\n\nFor a quick tour of the server, check out #world-map! ' \
-                      'That\'s where you\'ll find all of the channels along with ' \
-                      'a description for each.\nAlso check out our self assignable' \
-                      ' roles with `.lsar`! These include username colours as well as ' \
-                      'roles that allow you to access specialized channels. Enjoy your stay!'
-    await bot.send_message(bot.get_channel('429756378542768129'), '{}'.format(greeting) + '{}'.format(welcome_message))
+    if greeting == 'yes':
+        with open('greetings.txt','r') as f:
+            greetings = f.read()
+            greetings = greetings.split('\n')
+            greetings = list(filter(None, greetings))
+            greeting = random.choice(greetings).format(member)
+        welcome_message = '\n\nFor a quick tour of the server, check out #world-map! ' \
+                          'That\'s where you\'ll find all of the channels along with ' \
+                          'a description for each.\nAlso check out our self assignable' \
+                          ' roles with `.lsar`! These include username colours as well as ' \
+                          'roles that allow you to access specialized channels. Enjoy your stay!'
+        await bot.send_message(bot.get_channel(wc), '{}'.format(greeting) + '{}'.format(welcome_message))
 
 # When someone leaves (;-;) send a random goodbye.
 @bot.event
 async def on_member_remove(member):
-    goodbyes = ['Goodbye, ','See ya, ','Bye, ','Sorry to see you go, ']
-    bye = random.choice(goodbyes)
-    await bot.send_message(bot.get_channel('429756378542768129'), '{}'.format(bye) + '{}!'.format(member))
+    if goodbye == 'yes':
+        goodbyes = ['Goodbye, ','See ya, ','Bye, ','Sorry to see you go, ']
+        bye = random.choice(goodbyes)
+        await bot.send_message(bot.get_channel('429756378542768129'), '{}'.format(bye) + '{}!'.format(member))
 
 # The currently very broken error handler. It only mostly works. Don't bother sacrificing your sanity to fix it.
 # Trust me. I tried.
@@ -133,7 +136,7 @@ async def on_command_error(error, ctx):
             await bot.delete_message(ctx.message)
         except discord.errors.NotFound:
             pass
-        message = await bot.send_message(ctx.message.channel, "{} This command was used {:.2f}s ago and is on cooldown. Try again in {:.2f}s.".format(ctx.message.author.mention, error.cooldown.per - error.retry_after, error.retry_after))
+        message = await bot.send_message(ctx.message.channel, "{} This command was used {:.2f}s ago! Please ry again in {:.2f}s.".format(ctx.message.author.mention, error.cooldown.per - error.retry_after, error.retry_after))
         await asyncio.sleep(10)
         await bot.delete_message(message)
 

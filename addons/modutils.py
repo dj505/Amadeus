@@ -152,5 +152,55 @@ class ModUtils:
         await self.bot.remove_roles(member, role)
         await self.bot.say('Your bad pun has been forgiven, {0.mention}'.format(member))
 
+    @commands.has_permissions(ban_members=True)
+    @commands.command(pass_context=True, brief='Enable or disable welcome messages.')
+    async def welcome(self, ctx, value):
+        if value == 'disable':
+            config = SafeConfigParser()
+            config.read('settings.ini')
+            config.set('main','greeting','no')
+            with open('settings.ini', 'w') as f:
+                config.write(f)
+            await self.bot.say('Config updated. Welcome message is now disabled.')
+        elif value == 'enable':
+            config = SafeConfigParser()
+            config.read('settings.ini')
+            config.set('main','greeting','yes')
+            with open('settings.ini', 'w') as f:
+                config.write(f)
+            await self.bot.say('Config updated. Welcome message is now enabled.')
+        else:
+            await self.bot.say('Please enter a valid value (`enable` or `disable`)')
+
+    @commands.has_permissions(ban_members=True)
+    @commands.command(pass_context=True, brief='Enable or disable goodbye messages.')
+    async def goodbye(self, ctx, value):
+        if value == 'disable':
+            config = SafeConfigParser()
+            config.read('settings.ini')
+            config.set('main','goodbye','no')
+            with open('settings.ini', 'w') as f:
+                config.write(f)
+            await self.bot.say('Config updated. Welcome message is now disabled.')
+        elif value == 'enable':
+            config = SafeConfigParser()
+            config.read('settings.ini')
+            config.set('main','goodbye','yes')
+            with open('settings.ini', 'w') as f:
+                config.write(f)
+            await self.bot.say('Config updated. Welcome message is now enabled.')
+        else:
+            await self.bot.say('Please enter a valid value (`enable` or `disable`)')
+
+    @commands.has_permissions(ban_members=True)
+    @commands.command(pass_context=True, brief='Set welcome channel.')
+    async def welcomechannel(self, ctx, channel: discord.Channel):
+        config = SafeConfigParser()
+        config.read('settings.ini')
+        config.set('main','welcomechannel',channel.id)
+        with open('settings.ini', 'w') as f:
+            config.write(f)
+        await self.bot.say('Config updated. Welcome channel is now set to #{}.'.format(channel))
+
 def setup(bot):
     bot.add_cog(ModUtils(bot))

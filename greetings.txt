@@ -1,0 +1,7 @@
+Hello there! You are a bold one, {0.mention}!
+Hey there, {0.mention}! Welcome to Future Studio!
+Oh hi {0.mention}! Welcome to Future Studio!
+Hey! Welcome, {0.mention}!
+Welcome to the server, {0.mention}
+Yo, welcome to Future Studio, {0.mention}!
+Thanks for popping in, {0.mention}! Welcome to Future Studio!
