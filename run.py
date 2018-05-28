@@ -36,10 +36,6 @@ else:
 token = config.get('main', 'token') # Set the bot token from the config
 prefix = config.get('main', 'prefix') # Set the bot prefix from the config
 desc = config.get('main', 'desc') # Set the bot description from the config
-greeting = config.get('main','greeting') # See if greeting is enabled or disabled
-goodbye = config.get('main','goodbye') # See if goodbyes are enabled or disabled
-wc = config.get('main','welcomechannel') # Get welcome channel ID
-
 
 bot = commands.Bot(command_prefix=prefix, description=desc)
 
@@ -88,7 +84,11 @@ async def on_ready():
 # When a member joins, send a random greeting from the "greetings" array.
 @bot.event
 async def on_member_join(member):
-    if greeting == 'yes':
+    config = SafeConfigParser()
+    config.read('settings.ini')
+    wc = config.get('main','welcomechannel') # Get welcome channel ID
+    greet = config.get('main','greeting') # See if greeting is enabled or disabled
+    if greet == 'yes':
         with open('greetings.txt','r') as f:
             greetings = f.read()
             greetings = greetings.split('\n')
@@ -104,6 +104,7 @@ async def on_member_join(member):
 # When someone leaves (;-;) send a random goodbye.
 @bot.event
 async def on_member_remove(member):
+    goodbye = config.get('main','goodbye') # See if goodbyes are enabled or disabled
     if goodbye == 'yes':
         goodbyes = ['Goodbye, ','See ya, ','Bye, ','Sorry to see you go, ']
         bye = random.choice(goodbyes)
