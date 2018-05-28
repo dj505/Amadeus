@@ -104,11 +104,14 @@ async def on_member_join(member):
 # When someone leaves (;-;) send a random goodbye.
 @bot.event
 async def on_member_remove(member):
-    goodbye = config.get('main','goodbye') # See if goodbyes are enabled or disabled
-    if goodbye == 'yes':
+    config = SafeConfigParser()
+    config.read('settings.ini')
+    wc = config.get('main','welcomechannel') # Get welcome channel ID
+    gbye = config.get('main','goodbye') # See if goodbye is enabled or disabled
+    if gbye == 'yes':
         goodbyes = ['Goodbye, ','See ya, ','Bye, ','Sorry to see you go, ']
         bye = random.choice(goodbyes)
-        await bot.send_message(bot.get_channel('429756378542768129'), '{}'.format(bye) + '{}!'.format(member))
+        await bot.send_message(bot.get_channel(wc), '{}'.format(bye) + '{}!'.format(member))
 
 # The currently very broken error handler. It only mostly works. Don't bother sacrificing your sanity to fix it.
 # Trust me. I tried.
