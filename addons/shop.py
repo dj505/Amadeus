@@ -23,6 +23,7 @@ class Shop:
         print('Addon "{}" loaded'.format(self.__class__.__name__))
 
 ##### The following command is no longer needed, uncomment if you plan to use it #####
+#
 #    async def role(self, ctx, role: discord.Role):
 #    @commands.command(pass_context=True, brief='Purchase a role for 100 credits or get the free Members role')
 #        assignable_roles = ['Blue','Turqoise','Green','Yellow','Orange','Pink','Purple','Grey','Black','DarkRed','DarkGreen','Magenta']
@@ -51,6 +52,8 @@ class Shop:
 #            else:
 #                embed = discord.Embed(title='No Wallet', description='You do not have an existing wallet or balance! Please run the `daily` command.', color=0xFF0000)
 #                await self.bot.say(embed=embed)
+#
+######################################################################################
 
     @commands.command(pass_context=True, brief='Check your wallet balance')
     async def wallet(self, ctx, user: discord.Member=None):
@@ -84,10 +87,8 @@ class Shop:
     @commands.command(pass_context=True, brief='The main shop.', aliases=['buy','store'])
     async def shop(self, ctx):
         '''
-        You can but healing items, armor, and weapons here.
+        See what's for sale!
         '''
-        embed = discord.Embed(title='Work In Progress', description='This command is still a heavy WIP. Do not use it seriously yet. There\'s no way to buy anything.', color=0x00FF99)
-        await self.bot.say(embed=embed)
         config = SafeConfigParser()
         config.read('shop.ini')
         weaponlist = {k:v for k,v in config.items('Weapons')}
@@ -122,41 +123,57 @@ class Shop:
         embed = discord.Embed(title='The Shop', description=bot_message, color=0x00FF99)
         await self.bot.say(embed=embed)
 
-    # Fair warning. The following code is an absolute mess. I have no idea what I'm doing.
-    # configparser is definitely not the best for this. Idk how to use the json module tho.
-    # I apologize in advance. You have been warned. Carry on.
-    # Dear future me: fix this dammit
-    @commands.command(pass_context=True, brief='Purchase a thing')
+    @commands.command(pass_context=True, brief='TESTING: Purchase')
     async def purchase(self, ctx, category, item):
-        await self.bot.say('This command is incomplete. Do not purchase anything yet.')
-        config = SafeConfigParser()
-        if not os.path.isfile('./{}_inv.ini'.format(str(ctx.message.author.id))):
-            message = await self.bot.say('Creating inventory...')
-            with open('./{}_inv.ini'.format(str(ctx.message.author.id)),'w+') as f:
-                f.write('[Weapons]\ninv = \nequipped = \n')
-                f.write('[Defense]\ninv = \nequipped = \n')
-                f.write('[Healing]\ninv = \n')
-            time.sleep(0.5)
-            message = await self.bot.edit_message(message, 'Inventory created! Please run the command again.')
-        else:
-            price = get_price(category, item)
-            price = int(price)
-            user = ctx.message.author.id
-            config.read('wallet.ini')
-            if config.has_section('{}'.format(user)):
-                balance = int(config.get('{}'.format(user), 'balance'))
-                if balance >= price:
-                    balance = balance - price
-                    config.set('{}'.format(user), 'balance', "{}".format(balance))
-                    with open('wallet.ini','w') as f:
-                        config.write(f)
-                    confirmation = await self.bot.say('Balance subtracted...')
-                    handle_purchase(category, ctx.message.author.id, item)
-                    confirmation.edit('Purchased!')
-                else:
-                    await self.bot.say('You can\'t afford this!')
+        await self.bot.say('This command is incomplete and does not work properly yet. Do not try to buy anything.')
+        id = ctx.message.author.id
+        file = open('players.json')
+        players = file.read()
+        data = json.loads(players)
+        try:
+            if category.lower() == 'weapon':
+                try:
+                    price = get_price('weapons', item)
+                    weapons = data[id]['weapons']
+                    weapons.append(item)
+                    data[id]['weapons'] = weapons
+                    data = json.dumps(data, indent=2, separators=(',',': '))
+                    with open('players.json','w') as f:
+                        f.write(data)
+                    subtract_balance(id, price)
+                    await self.bot.say('Purchase succeeded!')
+                except Exception as e:
+                    await self.bot.say('Something went wrong. Is that an available item?')
+                    print(e)
+            elif category.lower() == 'defense':
+                try:
+                    price = get_price('defense', item)
+                    armor = data[id]['defense']
+                    armor.append(item)
+                    data[id]['weapons'] = armor
+                    data = json.dumps(data, indent=2, separators=(',',': '))
+                    with open('players.json','w') as f:
+                        f.write(data)
+                    await self.bot.say('Purchase succeeded!')
+                except:
+                    await self.bot.say('Something went wrong. Is that an available item?')
+            elif category.lower() == 'health' or category.lower() == 'healing':
+                try:
+                    price = get_price('healing', item)
+                    items = data[id]['healing']
+                    items.append(item)
+                    data[id]['weapons'] = items
+                    data = json.dumps(data, indent=2, separators=(',',': '))
+                    with open('players.json','w') as f:
+                        f.write(data)
+                    await self.bot.say('Purchase succeeded!')
+                except:
+                    await self.bot.say('Something went wrong. Is that an available item?')
             else:
-                await self.bot.say('You don\'t have a wallet!')
+                await self.bot.say('Please enter a valid category and item.')
+        except Exception as e:
+            await self.bot.say('Something went wrong! Make sure you created an inventory with the `mkinv` command first.')
+            print(e)
 
     @commands.command(pass_context=True, brief="WIP - Display inv")
     async def mkinv(self, ctx):
@@ -213,20 +230,22 @@ def get_power(category, item):
     statlist = statlist.split(' ')
     return statlist[0]
 
+def subtract_balance(user, amount):
+    amount = int(amount)
+    config = SafeConfigParser()
+    config.read('wallet.ini')
+    balance = config.get(user, 'balance')
+    balance = int(balance)
+    balance = balance - amount
+    config.set(user, 'balance', str(balance))
+    with open('wallet.ini', 'w') as f:
+        config.write(f)
+
 def get_balance(userid):
     config = SafeConfigParser()
     config.read('wallet.ini')
     balance = config.get(userid, 'balance')
     return int(balance)
-
-def handle_purchase(category, id, item):
-    category = category.title()
-    config = SafeConfigParser()
-    config.read('{}_inv.ini'.format(id))
-    inv = config.get(category, 'inv')
-    eq = config.get(category, 'equipped')
-    inv = inv.split(',')
-    inv.append(item)
 
 def setup(bot):
     bot.add_cog(Shop(bot))
