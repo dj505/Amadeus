@@ -4,6 +4,7 @@ import configparser
 from configparser import SafeConfigParser
 import os
 import time
+import json
 
 if not os.path.isfile('./shop.ini'):
     print('Creating shop.ini...')
@@ -21,35 +22,35 @@ class Shop:
         self.bot = bot
         print('Addon "{}" loaded'.format(self.__class__.__name__))
 
-    @commands.command(pass_context=True, brief='Purchase a role for 100 credits or get the free Members role')
-    async def role(self, ctx, role: discord.Role):
-        assignable_roles = ['Blue','Turqoise','Green','Yellow','Orange','Pink','Purple','Grey','Black','DarkRed','DarkGreen','Magenta']
-        member = ctx.message.author
-        if str(role).lower() == 'moderator' or str(role).lower() == 'admin':
-            embed = discord.Embed(title='Role assignment failed!', description='It looks like you tried to give yourself an admin or moderator role. ' \
-                                                                               'This is not a publicly assignable role.', color=0xFF0000)
-            embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
-            await self.bot.say(embed=embed)
-        elif str(role).lower() == 'members' or str(role).lower() == 'spoilers':
-            await self.bot.add_roles(member, role)
-            embed = discord.Embed(title='Set role!', description='You have successfully been assigned the {} role!'.format(role), color=0x00FF99)
-            await self.bot.say(embed=embed)
-        elif str(role) in assignable_roles and get_balance(ctx.message.author.id) >= 100:
-            config = SafeConfigParser()
-            config.read('wallet.ini')
-            user = ctx.message.author.id
-            if config.has_section('{}'.format(user)):
-                balance = int(config.get('{}'.format(user), 'balance'))
-                balance = balance - 100
-                config.set('{}'.format(user), 'balance', "{}".format(balance))
-                with open('wallet.ini','w') as f:
-                    config.write(f)
-                await self.bot.add_roles(member, role)
-                embed = discord.Embed(title='Set role!', description='You have successfully been assigned the {} role for 100 credits!'.format(role), color=0x00FF99)
-                await self.bot.say(embed=embed)
-            else:
-                embed = discord.Embed(title='No Wallet', description='You do not have an existing wallet or balance! Please run the `daily` command.', color=0xFF0000)
-                await self.bot.say(embed=embed)
+##### The following command is no longer needed, uncomment if you plan to use it #####
+#    async def role(self, ctx, role: discord.Role):
+#    @commands.command(pass_context=True, brief='Purchase a role for 100 credits or get the free Members role')
+#        assignable_roles = ['Blue','Turqoise','Green','Yellow','Orange','Pink','Purple','Grey','Black','DarkRed','DarkGreen','Magenta']
+#        member = ctx.message.author
+#        if str(role).lower() == 'moderator' or str(role).lower() == 'admin':
+#            embed = discord.Embed(title='Role assignment failed!', description='It looks like you tried to give yourself an admin or moderator role. ' \
+#                                                                               'This is not a publicly assignable role.', color=0xFF0000)
+#            embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
+#            await self.bot.say(embed=embed)
+#        elif str(role).lower() == 'members' or str(role).lower() == 'spoilers':
+#            await self.bot.add_roles(member, role)
+#            embed = discord.Embed(title='Set role!', description='You have successfully been assigned the {} role!'.format(role), color=0x00FF99)
+#            await self.bot.say(embed=embed)
+#        elif str(role) in assignable_roles and get_balance(ctx.message.author.id) >= 100:
+#            config.read('wallet.ini')
+#            user = ctx.message.author.id
+#            if config.has_section('{}'.format(user)):
+#                balance = int(config.get('{}'.format(user), 'balance'))
+#                balance = balance - 100
+#                config.set('{}'.format(user), 'balance', "{}".format(balance))
+#                with open('wallet.ini','w') as f:
+#                    config.write(f)
+#                await self.bot.add_roles(member, role)
+#                embed = discord.Embed(title='Set role!', description='You have successfully been assigned the {} role for 100 credits!'.format(role), color=0x00FF99)
+#                await self.bot.say(embed=embed)
+#            else:
+#                embed = discord.Embed(title='No Wallet', description='You do not have an existing wallet or balance! Please run the `daily` command.', color=0xFF0000)
+#                await self.bot.say(embed=embed)
 
     @commands.command(pass_context=True, brief='Check your wallet balance')
     async def wallet(self, ctx, user: discord.Member=None):
@@ -156,6 +157,45 @@ class Shop:
                     await self.bot.say('You can\'t afford this!')
             else:
                 await self.bot.say('You don\'t have a wallet!')
+
+    @commands.command(pass_context=True, brief="WIP - Display inv")
+    async def mkinv(self, ctx):
+        file = open('players.json')
+        players = file.read()
+        inv = json.loads(players)
+        id = str(ctx.message.author.id)
+        inv[id] = {
+            'health': 100,
+            'weapons': [],
+            'defense': [],
+            'healing': [],
+            'equipped_weapon': '',
+            'equipped_defense': '',
+        }
+        invs = json.dumps(inv, indent=2, separators=(',',': '))
+        with open('players.json','w') as f:
+            f.write(invs)
+        await self.bot.say('Inventory created!')
+
+    @commands.command(pass_context=True, brief='WIP - Display inv')
+    async def inv(self, ctx, user: discord.Member=None):
+        if user == None:
+            user = ctx.message.author
+        file = open('players.json')
+        players = file.read()
+        invs = json.loads(players)
+        player = invs['{}'.format(ctx.message.author.id)]
+        weapons = ', '.join(player['weapons'])
+        defense = ', '.join(player['defense'])
+        healing = ', '.join(player['healing'])
+        embed = discord.Embed(title='Inventory/Info for {}'.format(user), description=None)
+        embed.add_field(name='Health', value=player['health'])
+        embed.add_field(name='Weapons', value=weapons)
+        embed.add_field(name='Defense', value=defense)
+        embed.add_field(name='Healing Items', value=healing)
+        embed.add_field(name='Equipped Weapon', value=player['equipped_weapon'])
+        embed.add_field(name='Equipped Armor', value=player['equipped_defense'])
+        await self.bot.say(embed=embed)
 
 def get_price(category, item):
     category = category.title()

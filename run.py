@@ -98,7 +98,9 @@ async def on_member_join(member):
                           'That\'s where you\'ll find all of the channels along with ' \
                           'a description for each.\nAlso check out our self assignable' \
                           ' roles with `.lsar`! These include username colours as well as ' \
-                          'roles that allow you to access specialized channels. Enjoy your stay!'
+                          'roles that allow you to access specialized channels. ' \
+                          'Also keep in mind that you\'ll need to assign yourself ' \
+                          'the `Members` role using Nadeko. Enjoy your stay!'
         await bot.send_message(bot.get_channel(wc), '{}'.format(greeting) + '{}'.format(welcome_message))
 
 # When someone leaves (;-;) send a random goodbye.
@@ -113,7 +115,7 @@ async def on_member_remove(member):
         bye = random.choice(goodbyes)
         await bot.send_message(bot.get_channel(wc), '{}'.format(bye) + '{}!'.format(member))
 
-# The currently very broken error handler. It only mostly works. Don't bother sacrificing your sanity to fix it.
+# The currently (now less) broken error handler. It only mostly works. Don't bother sacrificing your sanity to fix it.
 # Trust me. I tried.
 @bot.event
 async def on_command_error(error, ctx):

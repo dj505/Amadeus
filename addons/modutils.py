@@ -3,6 +3,7 @@ from discord.ext import commands
 from configparser import SafeConfigParser
 import datetime
 import asyncio
+import time
 
 class ModUtils:
     '''
@@ -90,34 +91,21 @@ class ModUtils:
 
     @commands.has_permissions(ban_members=True)
     @commands.command(pass_context=True, no_pm=True)
-    async def prune(self, ctx, amount : int = 50):
+    async def clean(self, ctx, amount):
         """
-        Prunes bot messages.
+        Prunes messages.
         """
         channel = ctx.message.channel
-
-        calls = 0
-        async for msg in self.bot.logs_from(channel, limit=amount, before=ctx.message):
-            if calls and calls % 5 == 0:
-                await asyncio.sleep(1.5)
-
-            if msg.author == self.bot.user:
-                await self.bot.delete_message(msg)
-                calls += 1
-        if calls == 1:
-            embed = discord.Embed(name='Pruned Messages', description='Complete.', color=0x00FF00)
-            embed.set_author(name='Pruned Message(s)')
-            done_message = await self.bot.say(embed=embed)
-            await self.bot.delete_message(ctx.message)
-            await asyncio.sleep(3)
-            await self.bot.delete_message(done_message)
+        messages = []
+        if int(amount) > 1:
+            async for message in self.bot.logs_from(ctx.message.channel, limit=int(amount)):
+                messages.append(message)
+            await self.bot.delete_messages(messages)
+            message = await self.bot.say('Complete! Deleted {} messages.'.format(amount))
+            time.sleep(5)
+            await self.bot.delete_message(message)
         else:
-            embed = discord.Embed(name='Pruned Messages', description='Complete.'.format(str(calls)))
-            embed.set_author(name='Pruned Message(s)')
-            done_message = await self.bot.say(embed=embed)
-            await self.bot.delete_message(ctx.message)
-            await asyncio.sleep(3)
-            await self.bot.delete_message(done_message)
+            await self.bot.say('Please provide a number between 2 and 100!')
 
     @commands.has_permissions(ban_members=True)
     @commands.command(pass_context=True, brief='Removes a reaction gif entry', aliases=['delreact','removereact','killreact'])
