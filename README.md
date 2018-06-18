@@ -1,5 +1,5 @@
 # Amadeus
-Another version of my Discord bot, with extra features, meant for the server [Future Studio](https://discord.gg/HbmunrE)!
+Another version of my Discord bot, with extra features, meant for the server Future Studio!
 
 ## What can it do?
 A lot! There's a variety of moderator commands such as:
@@ -37,7 +37,7 @@ settings.ini
 [main]
 token = your bot token here
 prefix = k! (or hyour prefix)
-desc = MakiseKurisu, a Future Studio server utility bot by dj505! (or your description)
+desc = Amadeus, a Future Studio server utility bot by dj505! (or your description)
 ```
 
 reactions.ini (this one may not be necessary)
